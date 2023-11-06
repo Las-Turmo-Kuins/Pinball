@@ -59,6 +59,12 @@ bool Player::Update(float dt)
 		dead = false;
 		respawn--;
 	}
+
+	if (turmo)
+	{
+		veljump.x -= 0.1f;
+	}
+
 	//Set the velocity of the pbody of the player
 	pbody->body->SetLinearVelocity(veljump);
 
@@ -94,11 +100,12 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		LOG("Collision UNKNOWN");
 		break;
 
-	case ColliderType::ENEMY:
+	case ColliderType::DEAD:
 		dead = true;
 		break;
 
-	case ColliderType::WALL:
+	case ColliderType::FISH:
+		turmo = true;
 		LOG("Colission WALL");
 		break;
 	}

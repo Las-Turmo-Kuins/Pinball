@@ -27,8 +27,8 @@ enum class ColliderType {
 	PLAYER, 
 	ITEM,
 	PLATFORM,
-	WALL,
-	ENEMY,
+	FISH,
+	DEAD,
 	UNKNOWN
 	// ..
 };

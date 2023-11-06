@@ -43,8 +43,8 @@ public:
 
 	bool canshot = true;
 	bool dead = false;
+	bool turmo = false;
 	pugi::xml_node config;
-
 	uint32 startTime;
 };
 
