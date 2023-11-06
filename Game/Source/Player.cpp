@@ -47,9 +47,17 @@ bool Player::Update(float dt)
 {
 	b2Vec2 veljump = pbody->body->GetLinearVelocity();
 
-	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
+	if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN && canshot)
 	{
 		veljump.y = -20;
+		canshot = false;
+	}
+	if (dead && respawn>0)
+	{
+		pbody->body->SetTransform({ PIXEL_TO_METERS(-50 + 16), PIXEL_TO_METERS(1425) }, 0);
+		canshot = true;
+		dead = false;
+		respawn--;
 	}
 	//Set the velocity of the pbody of the player
 	pbody->body->SetLinearVelocity(veljump);
@@ -87,6 +95,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
 
 	case ColliderType::ENEMY:
+		dead = true;
 		break;
 
 	case ColliderType::WALL:

@@ -41,7 +41,8 @@ public:
 
 	Animation player;
 
-
+	bool canshot = true;
+	bool dead = false;
 	pugi::xml_node config;
 
 	uint32 startTime;
