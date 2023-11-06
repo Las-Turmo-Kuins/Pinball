@@ -9,7 +9,7 @@
   </renderer>
 
   <window>
-    <resolution width="1024" height="735" scale="1"/>
+    <resolution width="1000" height="1000" scale="1"/>
     <fullscreen value="false "/>
     <borderless value="false"/>
     <resizable value="false"/>
@@ -23,7 +23,7 @@
 
   <scene>
     <map path="Assets/Maps/" name="Map_final.tmx"/>
-    <player x="100" y="670" texturepath="Assets/Textures/Player/player_1.png"/>
+    <player x="720" y="1400" texturepath="Assets/Textures/Player/player_1.png"/>
   </scene>
   <animations>
 		<player loop="true" speed="0.075f">
