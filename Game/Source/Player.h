@@ -41,43 +41,8 @@ public:
 
 	Animation player;
 
-	Animation player_walk;
-
-	Animation player_speed;
-
-	Animation player_jump;
-	Animation player_inair;
-
-	Animation player_inv;
-
-	Animation player_hurt;
-
-	Animation player_dead;
-
-	Animation player_attack;
-
 
 	pugi::xml_node config;
-
-	bool leftmode = false;
-	bool rightmode = true;
-
-	bool moving = false;
-
-	bool atacking = false;
-
-	bool jumping = false;
-
-	bool inground = false;
-
-	bool Godmode=false;
-
-	bool canmove = true;
-
-	bool dead = false;
-
-	bool check_1 = false;
-	bool check_2 = false;
 
 	uint32 startTime;
 };
