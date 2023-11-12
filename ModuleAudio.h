@@ -4,7 +4,7 @@
 #include "Module.h"
 #include "SDL_mixer\include\SDL_mixer.h"
 
-#define DEFAULT_MUSIC_FADE_TIME 0.5f
+#define DEFAULT_MUSIC_FADE_TIME 2.0f
 
 class ModuleAudio : public Module
 {
@@ -24,8 +24,6 @@ public:
 
 	// Play a previously loaded WAV
 	bool PlayFx(unsigned int fx, int repeat = 0);
-
-	void ChangeVolume(int volume = 128);
 
 private:
 

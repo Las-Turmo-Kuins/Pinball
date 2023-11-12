@@ -166,7 +166,3 @@ bool ModuleAudio::PlayFx(unsigned int id, int repeat)
 
 	return ret;
 }
-
-void ModuleAudio::ChangeVolume(int volume) {
-	Mix_VolumeMusic(volume);
-}

@@ -12,12 +12,14 @@
 #define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
 
+
+
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
 public:
-	PhysBody();
-	~PhysBody();
+	PhysBody() : listener(NULL), body(NULL)
+	{}
 
 	void GetPosition(int& x, int &y) const;
 	float GetRotation() const;
@@ -34,44 +36,38 @@ public:
 class ModulePhysics : public Module, public b2ContactListener // TODO
 {
 public:
-	
-	// Constructors & Destructors
 	ModulePhysics(Application* app, bool start_enabled = true);
 	~ModulePhysics();
 
-	// Main module steps
 	bool Start();
 	update_status PreUpdate();
 	update_status PostUpdate();
 	bool CleanUp();
 
-	// Create main ground
-	void CreateScenarioGround();
-
-	// Create basic physics objects
 	PhysBody* CreateCircle(int x, int y, int radius);
+	PhysBody* CreateCircleStatic(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
-
-	PhysBody* CreateSolidChain(int x, int y, int* points, int size);
-	PhysBody* CreateCircularBumper(int x, int y, int radius);
+	PhysBody* CreateReboundChain(int x, int y, int* points, int size);
+	PhysBody* CreateBumper(int x, int y, int radius);
+	b2World* world;
+	
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
-	// Box2D World
-	b2World* world;
-
 private:
 
-	// Debug mode
 	bool debug;
-
-	// Main ground
-	b2Body* ground;
-
-	// Mouse joint
+	
 	b2MouseJoint* mouse_joint;
-	b2Body* mouse_body;
+	b2Body* ground;
+	b2Body* mouseBody;
+	b2Vec2 p;
+
+	uint bonus_fx;
+	uint dieFx;
+	uint bumpFx;
+	uint trianFx;
 };

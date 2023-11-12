@@ -50,7 +50,6 @@ update_status ModuleRender::PreUpdate()
 // Update: debug camera
 update_status ModuleRender::Update()
 {
-	
 	return UPDATE_CONTINUE;
 }
 

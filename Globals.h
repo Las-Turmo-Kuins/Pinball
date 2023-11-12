@@ -21,12 +21,12 @@ enum update_status
 };
 
 // Configuration -----------
-#define SCREEN_WIDTH 552 //1380
-#define SCREEN_HEIGHT 768 //1920
+#define SCREEN_WIDTH 417
+#define SCREEN_HEIGHT 840
 #define SCREEN_SIZE 1
 #define WIN_FULLSCREEN false
 #define WIN_RESIZABLE false
 #define WIN_BORDERLESS false
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
-#define TITLE "8-Ball Pinball"
+#define TITLE "Pelota Playa Pinball 2D"

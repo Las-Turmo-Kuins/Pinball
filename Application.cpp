@@ -1,16 +1,14 @@
+
 #include "Module.h"
 #include "ModuleWindow.h"
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
 #include "ModuleInput.h"
 #include "ModuleAudio.h"
-#include "ModuleFade.h"
 #include "ModulePlayer.h"
 #include "ModulePhysics.h"
 #include "ModuleSceneIntro.h"
-#include "ModuleSceneTitle.h"
-#include "ModuleQFonts.h"
-#include "ModuleSceneMenu.h"
+#include "ModuleFonts.h"
 #include "Application.h"
 
 Application::Application()
@@ -19,16 +17,15 @@ Application::Application()
 	window = new ModuleWindow(this);
 	textures = new ModuleTextures(this);
 	input = new ModuleInput(this);
-	audio = new ModuleAudio(this);
-	fade = new ModuleFade(this);
-	player = new ModulePlayer(this, false);
-	scene_title = new ModuleSceneTitle(this, true);
-	scene_intro = new ModuleSceneIntro(this, false);
-	scene_menu = new ModuleSceneMenu(this, false);
-	physics = new ModulePhysics(this, false);
-	qfonts = new ModuleQFonts(this, false);
+	audio = new ModuleAudio(this, true);
+	player = new ModulePlayer(this);
+	scene_intro = new ModuleSceneIntro(this);
+	physics = new ModulePhysics(this);
+	fonts = new ModuleFonts(this);
 
-	// Add modules ---
+	// The order of calls is very important!
+	// Modules will Init() Start() and Update in this order
+	// They will CleanUp() in reverse order
 
 	// Main Modules
 	AddModule(window);
@@ -37,19 +34,12 @@ Application::Application()
 	AddModule(textures);
 	AddModule(input);
 	AddModule(audio);
-	AddModule(fade);
-	
+	AddModule(fonts);
 	// Scenes
-
-	AddModule(scene_title);
 	AddModule(scene_intro);
-	AddModule(scene_menu);
-
+	
 	// Player
 	AddModule(player);
-
-	// Fonts
-	AddModule(qfonts);
 }
 
 Application::~Application()
@@ -131,9 +121,7 @@ bool Application::CleanUp()
 
 	while(item != NULL && ret == true)
 	{
-		if (item->data->IsEnabled()) {
-			ret = item->data->CleanUp();
-		}
+		ret = item->data->CleanUp();
 		item = item->prev;
 	}
 	return ret;
