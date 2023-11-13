@@ -34,7 +34,7 @@ bool ModuleSceneIntro::Start()
 
 	//flippers
 	//right flippers
-	right = App->physics->CreateRectangle(235, 706, 32, 12);
+	right = App->physics->CreateRectangle(235, 706, 32, 12, b2_dynamicBody);
 	right_circle = App->physics->CreateCircleStatic(235, 706, 6);
 
 	b2RevoluteJointDef rightRevJoint;
@@ -50,7 +50,7 @@ bool ModuleSceneIntro::Start()
 	b2RevoluteJoint* joint_right = (b2RevoluteJoint*)App->physics->world->CreateJoint(&rightRevJoint);
 
 	//left flippers
-	left = App->physics->CreateRectangle(140, 706, 32, 12);
+	left = App->physics->CreateRectangle(140, 706, 32, 12, b2_dynamicBody);
 	left_circle = App->physics->CreateCircleStatic(140, 706, 6);
 
 	b2RevoluteJointDef leftRevJoint;
@@ -65,6 +65,9 @@ bool ModuleSceneIntro::Start()
 
 	b2RevoluteJoint* joint_left = (b2RevoluteJoint*)App->physics->world->CreateJoint(&leftRevJoint);
 
+	boxes.add(App->physics->CreateRectangle(300, 400, 10, 30,  b2_staticBody));
+	boxes.add(App->physics->CreateRectangle(310, 407, 30, 10, b2_staticBody));
+	boxes.add(App->physics->CreateRectangle(330, 400, 10, 30, b2_staticBody));
 	return ret;
 }
 
@@ -79,6 +82,10 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
+	{
+		Create();
+	}
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		ray_on = !ray_on;
@@ -88,13 +95,13 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25, b2_dynamicBody));
 		circles.getLast()->data->listener = this;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
+		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50, b2_dynamicBody));
 	}
 
 	if ((App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) /*&& (lives != 0)*/)
@@ -210,7 +217,13 @@ update_status ModuleSceneIntro::Update()
 
 	return UPDATE_CONTINUE;
 }
+void ModuleSceneIntro::Create()
+{
 
+	circles.add(App->physics->CreateCircle(310, 350, 8, b2_dynamicBody));
+	circles.getLast()->data->listener = this;
+	circles.getLast()->data->body->SetBullet(true);
+}
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
