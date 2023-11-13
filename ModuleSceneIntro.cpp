@@ -32,6 +32,62 @@ bool ModuleSceneIntro::Start()
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
+	int map_data[102] = {
+	92, 637,
+	92, 617,
+	0, 540,
+	1, 442,
+	12, 430,
+	1, 417,
+	0, 355,
+	72, 285,
+	7, 217,
+	0, 187,
+	17, 122,
+	2, 102,
+	0, 87,
+	11, 67,
+	27, 57,
+	45, 59,
+	58, 69,
+	64, 82,
+	96, 76,
+	85, 50,
+	114, 35,
+	149, 24,
+	178, 22,
+	211, 25,
+	239, 32,
+	265, 45,
+	297, 70,
+	320, 94,
+	342, 128,
+	360, 174,
+	358, 233,
+	358, 587,
+	331, 586,
+	332, 199,
+	326, 165,
+	313, 135,
+	269, 88,
+	262, 92,
+	286, 116,
+	310, 157,
+	296, 173,
+	309, 184,
+	319, 200,
+	325, 213,
+	327, 227,
+	327, 340,
+	312, 352,
+	327, 365,
+	325, 537,
+	232, 619,
+	232, 637
+	};
+	map = App->physics->CreateChain(0, 0, map_data, 98);
+	map->body->SetType(b2_staticBody);
+	map->body->GetFixtureList()->SetRestitution(0.5f);
 	//flippers
 	//right flippers
 	right = App->physics->CreateRectangle(235, 706, 32, 12, b2_dynamicBody);

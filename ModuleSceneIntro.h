@@ -21,7 +21,7 @@ public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
-
+	PhysBody* map;
 	PhysBody* sensor;
 	PhysBody* right;
 	PhysBody* right_circle;
