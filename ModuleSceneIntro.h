@@ -23,6 +23,11 @@ public:
 	p2List<PhysBody*> ricks;
 
 	PhysBody* sensor;
+	PhysBody* right;
+	PhysBody* right_circle;
+	PhysBody* left;
+	PhysBody* left_circle;
+
 	bool sensed;
 
 	SDL_Texture* circle;

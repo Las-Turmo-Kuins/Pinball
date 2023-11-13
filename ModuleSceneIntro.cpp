@@ -32,6 +32,39 @@ bool ModuleSceneIntro::Start()
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
+	//flippers
+	//right flippers
+	right = App->physics->CreateRectangle(235, 706, 32, 12);
+	right_circle = App->physics->CreateCircleStatic(235, 706, 6);
+
+	b2RevoluteJointDef rightRevJoint;
+	rightRevJoint.bodyA = right->body;
+	rightRevJoint.bodyB = right_circle->body;
+	rightRevJoint.localAnchorA.Set(PIXEL_TO_METERS(25), 0);
+	rightRevJoint.localAnchorB.Set(0, 0);
+	rightRevJoint.referenceAngle = 0 * DEGTORAD;
+	rightRevJoint.enableLimit = true;
+	rightRevJoint.lowerAngle = -30 * DEGTORAD;
+	rightRevJoint.upperAngle = 30 * DEGTORAD;
+
+	b2RevoluteJoint* joint_right = (b2RevoluteJoint*)App->physics->world->CreateJoint(&rightRevJoint);
+
+	//left flippers
+	left = App->physics->CreateRectangle(140, 706, 32, 12);
+	left_circle = App->physics->CreateCircleStatic(140, 706, 6);
+
+	b2RevoluteJointDef leftRevJoint;
+	leftRevJoint.bodyA = left->body;
+	leftRevJoint.bodyB = left_circle->body;
+	leftRevJoint.localAnchorA.Set(PIXEL_TO_METERS(-25), 0);
+	leftRevJoint.localAnchorB.Set(0, 0);
+	leftRevJoint.referenceAngle = 0 * DEGTORAD;
+	leftRevJoint.enableLimit = true;
+	leftRevJoint.lowerAngle = -30 * DEGTORAD;
+	leftRevJoint.upperAngle = 30 * DEGTORAD;
+
+	b2RevoluteJoint* joint_left = (b2RevoluteJoint*)App->physics->world->CreateJoint(&leftRevJoint);
+
 	return ret;
 }
 
@@ -62,6 +95,16 @@ update_status ModuleSceneIntro::Update()
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
 		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
+	}
+
+	if ((App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) /*&& (lives != 0)*/)
+	{
+		right->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
+	}
+
+	if ((App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)/* && (lives != 0)*/)
+	{
+		left->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
