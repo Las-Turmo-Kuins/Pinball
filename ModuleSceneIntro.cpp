@@ -24,8 +24,8 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
-	flippR = App->textures->Load("pinball/FlippR.png");
-	flippL = App->textures->Load("pinball/FlippL.png");
+	flippR = App->textures->Load("pinball/flipperR.png");
+	flippL = App->textures->Load("pinball/flipperL.png");
 	mapa = App->textures->Load("pinball/Fondo_pinball.png");
 
 
@@ -35,8 +35,8 @@ bool ModuleSceneIntro::Start()
 
 	//flippers
 	//right flippers
-	right = App->physics->CreateRectangle(230, 570, 64, 12);
-	right_circle = App->physics->CreateCircleStatic(230, 570, 6);
+	right = App->physics->CreateRectangle(230, 565, 80, 12);
+	right_circle = App->physics->CreateCircleStatic(230, 565, 6);
 
 	b2RevoluteJointDef rightRevJoint;
 	rightRevJoint.bodyA = right->body;
@@ -51,8 +51,8 @@ bool ModuleSceneIntro::Start()
 	b2RevoluteJoint* joint_right = (b2RevoluteJoint*)App->physics->world->CreateJoint(&rightRevJoint);
 
 	//left flippers
-	left = App->physics->CreateRectangle(97, 570, 64, 12);
-	left_circle = App->physics->CreateCircleStatic(97, 570, 6);
+	left = App->physics->CreateRectangle(97, 565, 80, 12);
+	left_circle = App->physics->CreateCircleStatic(97, 565, 6);
 
 	b2RevoluteJointDef leftRevJoint;
 	leftRevJoint.bodyA = left->body;
@@ -110,9 +110,9 @@ update_status ModuleSceneIntro::Update()
 		left->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
 	}
 
-	App->renderer->Blit(flippR, 180, 570, NULL, 1.0f,  right->GetRotation());
+	App->renderer->Blit(flippR, 170, 565, NULL, 1.0f,  right->GetRotation());
 
-	App->renderer->Blit(flippL, 75, 570, NULL, 1.0f, left->GetRotation());
+	App->renderer->Blit(flippL, 65, 570, NULL, 1.0f, left->GetRotation());
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
