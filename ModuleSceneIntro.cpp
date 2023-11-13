@@ -32,7 +32,7 @@ bool ModuleSceneIntro::Start()
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
-	int map_data[104] = {
+	int map_data[102] = {
 	92, 637,
 	92, 617,
 	0, 540,
@@ -83,10 +83,9 @@ bool ModuleSceneIntro::Start()
 	327, 365,
 	325, 537,
 	232, 619,
-	232, 637,
-	232, 650
+	232, 637
 	};
-	map = App->physics->CreateChain(0, 0, map_data, 104);
+	map = App->physics->CreateChain(0, 0, map_data, 102);
 	map->body->SetType(b2_staticBody);
 	map->body->GetFixtureList()->SetRestitution(0.5f);
 	//flippers
@@ -121,10 +120,23 @@ bool ModuleSceneIntro::Start()
 	leftRevJoint.upperAngle = 30 * DEGTORAD;
 
 	b2RevoluteJoint* joint_left = (b2RevoluteJoint*)App->physics->world->CreateJoint(&leftRevJoint);
+	
+	spring = App->physics->CreateRectangle(345, 500, 15, 4, b2_dynamicBody);
+	springSurface = App->physics->CreateRectangle(345, 575, 15, 10, b2_staticBody);
+	spring->body->GetFixtureList()->SetDensity(10.0f);
 
-	boxes.add(App->physics->CreateRectangle(300, 400, 10, 30,  b2_staticBody));
-	boxes.add(App->physics->CreateRectangle(310, 407, 30, 10, b2_staticBody));
-	boxes.add(App->physics->CreateRectangle(330, 400, 10, 30, b2_staticBody));
+	b2PrismaticJointDef springJoint;
+	springJoint.collideConnected = true;
+	springJoint.bodyA = spring->body;
+	springJoint.bodyB = springSurface->body;
+
+	springJoint.localAnchorA.Set(0, 0);
+	springJoint.localAnchorB.Set(0, -0.65f);
+	springJoint.localAxisA.Set(0, -1);
+	springJoint.enableLimit = true;
+	springJoint.lowerTranslation = -0.02;
+	springJoint.upperTranslation = 1;
+	(b2PrismaticJoint*)App->physics->world->CreateJoint(&springJoint);
 	return ret;
 }
 
@@ -143,12 +155,19 @@ update_status ModuleSceneIntro::Update()
 	{
 		Create();
 	}
-	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	//
+	spring->body->ApplyForce(b2Vec2(0, -20), b2Vec2(0, 0), true);
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+		spring->body->ApplyForce(b2Vec2(0, 21), b2Vec2(0, 0), true);
+	}
+	/*if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		ray_on = !ray_on;
 		ray.x = App->input->GetMouseX();
 		ray.y = App->input->GetMouseY();
-	}
+	}*/
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
@@ -277,7 +296,7 @@ update_status ModuleSceneIntro::Update()
 void ModuleSceneIntro::Create()
 {
 
-	circles.add(App->physics->CreateCircle(310, 350, 8, b2_dynamicBody));
+	circles.add(App->physics->CreateCircle(345, 350, 8, b2_dynamicBody));
 	circles.getLast()->data->listener = this;
 	circles.getLast()->data->body->SetBullet(true);
 }

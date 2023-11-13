@@ -28,6 +28,9 @@ public:
 	PhysBody* left;
 	PhysBody* left_circle;
 
+	PhysBody* spring;
+	PhysBody* springSurface;
+	PhysBody* limit;
 	bool sensed;
 
 	SDL_Texture* circle;
