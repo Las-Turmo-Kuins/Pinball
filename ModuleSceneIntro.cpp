@@ -24,10 +24,10 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
+	flippR = App->textures->Load("pinball/Flipperright.png");
+	flippL = App->textures->Load("pinball/Flipperleft.png");;
 
-	circle = App->textures->Load("pinball/wheel.png"); 
-	box = App->textures->Load("pinball/crate.png");
-	rick = App->textures->Load("pinball/rick_head.png");
+
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
@@ -45,7 +45,7 @@ bool ModuleSceneIntro::Start()
 	rightRevJoint.referenceAngle = 0 * DEGTORAD;
 	rightRevJoint.enableLimit = true;
 	rightRevJoint.lowerAngle = -30 * DEGTORAD;
-	rightRevJoint.upperAngle = 30 * DEGTORAD;
+	rightRevJoint.upperAngle = 50 * DEGTORAD;
 
 	b2RevoluteJoint* joint_right = (b2RevoluteJoint*)App->physics->world->CreateJoint(&rightRevJoint);
 
@@ -60,7 +60,7 @@ bool ModuleSceneIntro::Start()
 	leftRevJoint.localAnchorB.Set(0, 0);
 	leftRevJoint.referenceAngle = 0 * DEGTORAD;
 	leftRevJoint.enableLimit = true;
-	leftRevJoint.lowerAngle = -30 * DEGTORAD;
+	leftRevJoint.lowerAngle = -50 * DEGTORAD;
 	leftRevJoint.upperAngle = 30 * DEGTORAD;
 
 	b2RevoluteJoint* joint_left = (b2RevoluteJoint*)App->physics->world->CreateJoint(&leftRevJoint);
@@ -106,6 +106,10 @@ update_status ModuleSceneIntro::Update()
 	{
 		left->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
 	}
+
+	App->renderer->Blit(flippR, 200, 700, NULL, 1.0f,  right->GetRotation());
+
+	App->renderer->Blit(flippL, 120, 700, NULL, 1.0f, left->GetRotation());
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{

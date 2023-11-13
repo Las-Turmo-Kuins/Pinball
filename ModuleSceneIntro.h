@@ -28,6 +28,9 @@ public:
 	PhysBody* left;
 	PhysBody* left_circle;
 
+	SDL_Texture* flippR;
+	SDL_Texture* flippL;
+
 	bool sensed;
 
 	SDL_Texture* circle;
