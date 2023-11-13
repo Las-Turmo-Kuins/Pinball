@@ -270,41 +270,11 @@ update_status ModulePhysics::PostUpdate()
 			}
 
 			
-		/*	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN) {
-				if (body == NULL) {
-					if (f->GetShape()->TestPoint(b->GetTransform(), mouse_position) == true) {
-						LOG("Found Body");
-						body = b;
-					}
-				}
-			}*/
+		
 		}
 	}
 
-	//if (body != nullptr) {
-	//	b2MouseJointDef def;
-	//	def.bodyA = ground;
-	//	def.bodyB = body;
-	//	def.target = mouse_position;
-	//	def.dampingRatio = 0.5f;
-	//	def.frequencyHz = 2.0f;
-	//	def.maxForce = 100.0f * body->GetMass();
-	//	mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
-	//}
-
-
-	//if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && mouse_joint != nullptr) {
-	//	mouse_joint->SetTarget(mouse_position);
-	//	b2Vec2 line1 = mouse_joint->GetBodyB()->GetPosition();
-	//	b2Vec2 line2 = mouse_joint->GetTarget();
-	//	App->renderer->DrawLine(METERS_TO_PIXELS(line1.x), METERS_TO_PIXELS(line1.y), METERS_TO_PIXELS(line2.x), METERS_TO_PIXELS(line2.y), 255, 0, 0);
-
-	//}
-	//
-	//if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && mouse_joint != nullptr) {
-	//	world->DestroyJoint(mouse_joint);
-	//	mouse_joint = nullptr;
-	//}
+	
 	return UPDATE_CONTINUE;
 }
 
