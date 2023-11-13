@@ -102,7 +102,7 @@ update_status ModuleSceneIntro::Update()
 
 	if ((App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) /*&& (lives != 0)*/)
 	{
-		right->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
+		right->body->ApplyForceToCenter(b2Vec2(0, -300), 50);
 	}
 
 	if ((App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)/* && (lives != 0)*/)
