@@ -24,8 +24,9 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
-	flippR = App->textures->Load("pinball/Flipperright.png");
-	flippL = App->textures->Load("pinball/Flipperleft.png");;
+	flippR = App->textures->Load("pinball/FlippR.png");
+	flippL = App->textures->Load("pinball/FlippL.png");
+	mapa = App->textures->Load("pinball/Fondo_pinball.png");
 
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
@@ -34,8 +35,8 @@ bool ModuleSceneIntro::Start()
 
 	//flippers
 	//right flippers
-	right = App->physics->CreateRectangle(235, 706, 32, 12);
-	right_circle = App->physics->CreateCircleStatic(235, 706, 6);
+	right = App->physics->CreateRectangle(230, 570, 64, 12);
+	right_circle = App->physics->CreateCircleStatic(230, 570, 6);
 
 	b2RevoluteJointDef rightRevJoint;
 	rightRevJoint.bodyA = right->body;
@@ -50,8 +51,8 @@ bool ModuleSceneIntro::Start()
 	b2RevoluteJoint* joint_right = (b2RevoluteJoint*)App->physics->world->CreateJoint(&rightRevJoint);
 
 	//left flippers
-	left = App->physics->CreateRectangle(140, 706, 32, 12);
-	left_circle = App->physics->CreateCircleStatic(140, 706, 6);
+	left = App->physics->CreateRectangle(97, 570, 64, 12);
+	left_circle = App->physics->CreateCircleStatic(97, 570, 6);
 
 	b2RevoluteJointDef leftRevJoint;
 	leftRevJoint.bodyA = left->body;
@@ -79,6 +80,8 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	App->renderer->Blit(mapa, 0, 0);
+
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		ray_on = !ray_on;
@@ -107,9 +110,9 @@ update_status ModuleSceneIntro::Update()
 		left->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
 	}
 
-	App->renderer->Blit(flippR, 200, 700, NULL, 1.0f,  right->GetRotation());
+	App->renderer->Blit(flippR, 180, 570, NULL, 2.0f,  right->GetRotation());
 
-	App->renderer->Blit(flippL, 120, 700, NULL, 1.0f, left->GetRotation());
+	App->renderer->Blit(flippL, 75, 570, NULL, 2.0f, left->GetRotation());
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{

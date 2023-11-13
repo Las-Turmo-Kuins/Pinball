@@ -33,6 +33,8 @@ public:
 
 	bool sensed;
 
+	SDL_Texture* mapa;
+
 	SDL_Texture* circle;
 	SDL_Texture* box;
 	SDL_Texture* rick;
