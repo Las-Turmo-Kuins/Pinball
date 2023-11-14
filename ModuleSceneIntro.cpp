@@ -33,10 +33,67 @@ bool ModuleSceneIntro::Start()
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
 
+	int map_data[102] = {
+	92, 637,
+	92, 617,
+	0, 540,
+	1, 442,
+	12, 430,
+	1, 417,
+	0, 355,
+	72, 285,
+	7, 217,
+	0, 187,
+	17, 122,
+	2, 102,
+	0, 87,
+	11, 67,
+	27, 57,
+	45, 59,
+	58, 69,
+	64, 82,
+	96, 76,
+	85, 50,
+	114, 35,
+	149, 24,
+	178, 22,
+	211, 25,
+	239, 32,
+	265, 45,
+	297, 70,
+	320, 94,
+	342, 128,
+	360, 174,
+	358, 233,
+	358, 587,
+	331, 586,
+	332, 199,
+	326, 165,
+	313, 135,
+	269, 88,
+	262, 92,
+	286, 116,
+	310, 157,
+	296, 173,
+	309, 184,
+	319, 200,
+	325, 213,
+	327, 227,
+	327, 340,
+	312, 352,
+	327, 365,
+	325, 537,
+	232, 619,
+	232, 637
+	};
+	map = App->physics->CreateChain(0, 0, map_data, 102);
+	map->body->SetType(b2_staticBody);
+	map->body->GetFixtureList()->SetRestitution(0.5f);
 	//flippers
 	//right flippers
-	right = App->physics->CreateRectangle(230, 565, 80, 12);
-	right_circle = App->physics->CreateCircleStatic(230, 565, 6);
+	right = App->physics->CreateRectangle(235, 706, 32, 12, b2_dynamicBody);
+	right_circle = App->physics->CreateCircleStatic(235, 706, 6);
+
 
 	b2RevoluteJointDef rightRevJoint;
 	rightRevJoint.bodyA = right->body;
@@ -51,8 +108,10 @@ bool ModuleSceneIntro::Start()
 	b2RevoluteJoint* joint_right = (b2RevoluteJoint*)App->physics->world->CreateJoint(&rightRevJoint);
 
 	//left flippers
-	left = App->physics->CreateRectangle(97, 565, 80, 12);
-	left_circle = App->physics->CreateCircleStatic(97, 565, 6);
+
+	left = App->physics->CreateRectangle(140, 706, 32, 12, b2_dynamicBody);
+	left_circle = App->physics->CreateCircleStatic(140, 706, 6);
+
 
 	b2RevoluteJointDef leftRevJoint;
 	leftRevJoint.bodyA = left->body;
@@ -65,7 +124,23 @@ bool ModuleSceneIntro::Start()
 	leftRevJoint.upperAngle = 30 * DEGTORAD;
 
 	b2RevoluteJoint* joint_left = (b2RevoluteJoint*)App->physics->world->CreateJoint(&leftRevJoint);
+	
+	spring = App->physics->CreateRectangle(345, 500, 15, 4, b2_dynamicBody);
+	springSurface = App->physics->CreateRectangle(345, 575, 15, 10, b2_staticBody);
+	spring->body->GetFixtureList()->SetDensity(10.0f);
 
+	b2PrismaticJointDef springJoint;
+	springJoint.collideConnected = true;
+	springJoint.bodyA = spring->body;
+	springJoint.bodyB = springSurface->body;
+
+	springJoint.localAnchorA.Set(0, 0);
+	springJoint.localAnchorB.Set(0, -0.65f);
+	springJoint.localAxisA.Set(0, -1);
+	springJoint.enableLimit = true;
+	springJoint.lowerTranslation = -0.02;
+	springJoint.upperTranslation = 1;
+	(b2PrismaticJoint*)App->physics->world->CreateJoint(&springJoint);
 	return ret;
 }
 
@@ -80,24 +155,36 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	App->renderer->Blit(mapa, 0, 0);
+  App->renderer->Blit(mapa, 0, 0);
+  
+	if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
+	{
+		Create();
+	}
+	//
+	spring->body->ApplyForce(b2Vec2(0, -20), b2Vec2(0, 0), true);
 
-	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+		spring->body->ApplyForce(b2Vec2(0, 21), b2Vec2(0, 0), true);
+	}
+	/*if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+
 	{
 		ray_on = !ray_on;
 		ray.x = App->input->GetMouseX();
 		ray.y = App->input->GetMouseY();
-	}
+	}*/
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25, b2_dynamicBody));
 		circles.getLast()->data->listener = this;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
+		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50, b2_dynamicBody));
 	}
 
 	if ((App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) /*&& (lives != 0)*/)
@@ -217,7 +304,13 @@ update_status ModuleSceneIntro::Update()
 
 	return UPDATE_CONTINUE;
 }
+void ModuleSceneIntro::Create()
+{
 
+	circles.add(App->physics->CreateCircle(345, 350, 8, b2_dynamicBody));
+	circles.getLast()->data->listener = this;
+	circles.getLast()->data->body->SetBullet(true);
+}
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;

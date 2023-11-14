@@ -16,19 +16,23 @@ public:
 	update_status Update();
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
-
+	void Create();
 public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
-
+	PhysBody* map;
 	PhysBody* sensor;
 	PhysBody* right;
 	PhysBody* right_circle;
 	PhysBody* left;
 	PhysBody* left_circle;
 
-	SDL_Texture* flippR;
+
+	PhysBody* spring;
+	PhysBody* springSurface;
+	PhysBody* limit;
+  SDL_Texture* flippR;
 	SDL_Texture* flippL;
 
 	bool sensed;
