@@ -86,9 +86,117 @@ bool ModuleSceneIntro::Start()
 	232, 619,
 	232, 637
 	};
+
+	int coin[16] = {
+	110, 72,
+	104, 78,
+	104, 88,
+	109, 93,
+	120, 93,
+	124, 87,
+	124, 78,
+	118, 72
+	};
+	int coin2[16] = {
+	156, 73,
+	149, 78,
+	149, 87,
+	155, 93,
+	162, 93,
+	169, 87,
+	169, 79,
+	162, 72
+	};
+	int coin3[16] = {
+	199, 73,
+	194, 78,
+	194, 85,
+	198, 93,
+	206, 93,
+	212, 87,
+	213, 78,
+	208, 72
+	};
+	int coin4[16] = {
+	243, 74,
+	238, 78,
+	237, 88,
+	243, 94,
+	252, 94,
+	258, 88,
+	258, 78,
+	252, 72
+	};
+	int coin5[16] = {
+	50, 17,
+	44, 23,
+	44, 31,
+	50, 37,
+	58, 37,
+	64, 31,
+	64, 23,
+	58, 17
+	};
+	int coin6[16] = {
+	-3, -8,
+	-9, -2,
+	-9, 6,
+	-3, 12,
+	5, 12,
+	11, 6,
+	11, -2,
+	5, -8
+	};
+	int trianguloiz[22] = {
+	33, 453,
+	31, 465,
+	35, 501,
+	31, 525,
+	56, 539,
+	73, 560,
+	81, 559,
+	83, 543,
+	62, 504,
+	53, 477,
+	41, 456
+	};
+	int triangulode[22] = {
+	294, 453,
+	283, 456,
+	265, 503,
+	244, 547,
+	247, 559,
+	256, 558,
+	270, 538,
+	294, 525,
+	297, 514,
+	292, 470,
+	298, 460
+	};
+	//mapa
 	map = App->physics->CreateChain(0, 0, map_data, 102);
 	map->body->SetType(b2_staticBody);
 	map->body->GetFixtureList()->SetRestitution(0.5f);
+	//coins
+	coins[0] = App->physics->CreateChain(0, 0, coin, 16);
+	coins[1] = App->physics->CreateChain(0, 0, coin2, 16);
+	coins[2] = App->physics->CreateChain(0, 0, coin3, 16);
+	coins[3] = App->physics->CreateChain(0, 0, coin4, 16);
+	coins[4] = App->physics->CreateChain(0, 0, coin5, 16);
+	coins[5] = App->physics->CreateChain(0, 0, coin6, 16);
+	for (int i = 0; i < 6; i++)
+	{
+		coins[i]->body->SetType(b2_staticBody);
+		coins[i]->body->GetFixtureList()->SetRestitution(1.0f);
+	}
+	//triangulos laterales
+	triangulos[0] = App->physics->CreateChain(0, 0, trianguloiz, 22);
+	triangulos[1] = App->physics->CreateChain(0, 0, triangulode, 22);
+	for (int i = 0; i < 2; i++)
+	{
+		triangulos[i]->body->SetType(b2_staticBody);
+		triangulos[i]->body->GetFixtureList()->SetRestitution(1.0f);
+	}
 	//flippers
 	//right flippers
 	right = App->physics->CreateRectangle(235, 706, 32, 12, b2_dynamicBody);
@@ -307,7 +415,7 @@ update_status ModuleSceneIntro::Update()
 void ModuleSceneIntro::Create()
 {
 
-	circles.add(App->physics->CreateCircle(345, 350, 8, b2_dynamicBody));
+	circles.add(App->physics->CreateCircle(345, 500, 8, b2_dynamicBody));
 	circles.getLast()->data->listener = this;
 	circles.getLast()->data->body->SetBullet(true);
 }
