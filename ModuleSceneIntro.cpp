@@ -178,13 +178,13 @@ bool ModuleSceneIntro::Start()
 	map->body->SetType(b2_staticBody);
 	map->body->GetFixtureList()->SetRestitution(0.5f);
 	//coins
-	coins[0] = App->physics->CreateChain(0, 0, coin, 16);
-	coins[1] = App->physics->CreateChain(0, 0, coin2, 16);
-	coins[2] = App->physics->CreateChain(0, 0, coin3, 16);
-	coins[3] = App->physics->CreateChain(0, 0, coin4, 16);
-	coins[4] = App->physics->CreateChain(0, 0, coin5, 16);
-	coins[5] = App->physics->CreateChain(0, 0, coin6, 16);
-	for (int i = 0; i < 6; i++)
+	//coins[0] = App->physics->CreateChain(0, 0, coin, 16);
+	coins[0] = App->physics->CreateChain(0, 0, coin2, 16);
+	coins[1] = App->physics->CreateChain(0, 0, coin3, 16);
+	//coins[3] = App->physics->CreateChain(0, 0, coin4, 16);
+	coins[2] = App->physics->CreateChain(0, 0, coin5, 16);
+	coins[3] = App->physics->CreateChain(0, 0, coin6, 16);
+	for (int i = 0; i < 4; i++)
 	{
 		coins[i]->body->SetType(b2_staticBody);
 		coins[i]->body->GetFixtureList()->SetRestitution(1.0f);
