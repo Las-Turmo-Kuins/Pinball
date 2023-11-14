@@ -23,6 +23,7 @@ public:
 	p2List<PhysBody*> ricks;
 	PhysBody* coins[4];
 	PhysBody* triangulos[2];
+	PhysBody* barriles[4];
 	PhysBody* map;
 	PhysBody* sensor;
 	PhysBody* right;

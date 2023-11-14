@@ -155,6 +155,48 @@ bool ModuleSceneIntro::Start()
 	292, 470,
 	298, 460
 	};
+	int bola1[16] = {//primera grande
+	124, 143,
+	107, 155,
+	107, 170,
+	124, 188,
+	135, 187,
+	150, 174,
+	151, 159,
+	135, 143
+	};
+	// Pivot 0, 0
+	int bola2[16] = {//segunda grande
+		188, 198,
+		173, 213,
+		173, 226,
+		188, 244,
+		200, 244,
+		217, 228,
+		216, 215,
+		201, 197
+	};
+	// Pivot 0, 0
+	int bola3[16] = {// tercera bola
+		223, 130,
+		209, 145,
+		209, 158,
+		224, 175,
+		238, 174,
+		253, 159,
+		252, 144,
+		238, 131
+	};
+	int bola4[16] = {//bola pequeña
+		64, 120,
+		53, 130,
+		53, 141,
+		63, 152,
+		71, 153,
+		85, 142,
+		85, 132,
+		72, 120
+	};
 	//mapa
 	map = App->physics->CreateChain(0, 0, map_data, 102);
 	map->body->SetType(b2_staticBody);
@@ -178,6 +220,16 @@ bool ModuleSceneIntro::Start()
 	{
 		triangulos[i]->body->SetType(b2_staticBody);
 		triangulos[i]->body->GetFixtureList()->SetRestitution(1.0f);
+	}
+
+	barriles[0] = App->physics->CreateChain(0, 0, bola1, 16);
+	barriles[1] = App->physics->CreateChain(0, 0, bola2, 16);
+	barriles[2] = App->physics->CreateChain(0, 0, bola3, 16);
+	barriles[3] = App->physics->CreateChain(0, 0, bola4, 16);
+	for (int i = 0; i < 4; i++)
+	{
+		barriles[i]->body->SetType(b2_staticBody);
+		barriles[i]->body->GetFixtureList()->SetRestitution(1.0f);
 	}
 	//flippers
 	//right flippers
