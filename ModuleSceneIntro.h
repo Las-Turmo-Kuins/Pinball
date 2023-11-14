@@ -32,8 +32,9 @@ public:
 	PhysBody* spring;
 	PhysBody* springSurface;
 	PhysBody* limit;
-  SDL_Texture* flippR;
+	SDL_Texture* flippR;
 	SDL_Texture* flippL;
+	int flippery = 585;
 
 	bool sensed;
 

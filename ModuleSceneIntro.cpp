@@ -91,8 +91,8 @@ bool ModuleSceneIntro::Start()
 	map->body->GetFixtureList()->SetRestitution(0.5f);
 	//flippers
 	//right flippers
-	right = App->physics->CreateRectangle(235, 706, 32, 12, b2_dynamicBody);
-	right_circle = App->physics->CreateCircleStatic(235, 706, 6);
+	right = App->physics->CreateRectangle(225, flippery, 64, 12, b2_dynamicBody);
+	right_circle = App->physics->CreateCircleStatic(225, flippery, 6);
 
 
 	b2RevoluteJointDef rightRevJoint;
@@ -109,8 +109,8 @@ bool ModuleSceneIntro::Start()
 
 	//left flippers
 
-	left = App->physics->CreateRectangle(140, 706, 32, 12, b2_dynamicBody);
-	left_circle = App->physics->CreateCircleStatic(140, 706, 6);
+	left = App->physics->CreateRectangle(100, flippery, 64, 12, b2_dynamicBody);
+	left_circle = App->physics->CreateCircleStatic(100, flippery, 6);
 
 
 	b2RevoluteJointDef leftRevJoint;
@@ -189,17 +189,17 @@ update_status ModuleSceneIntro::Update()
 
 	if ((App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT) /*&& (lives != 0)*/)
 	{
-		right->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
+		right->body->ApplyForceToCenter(b2Vec2(0, -150), 1);
 	}
 
 	if ((App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)/* && (lives != 0)*/)
 	{
-		left->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
+		left->body->ApplyForceToCenter(b2Vec2(0, -150), 1);
 	}
 
-	App->renderer->Blit(flippR, 170, 565, NULL, 1.0f,  right->GetRotation());
+	App->renderer->Blit(flippR, 168, 575, NULL, 1.0f,  right->GetRotation());
 
-	App->renderer->Blit(flippL, 65, 570, NULL, 1.0f, left->GetRotation());
+	App->renderer->Blit(flippL, 50, 575, NULL, 1.0f, left->GetRotation());
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
