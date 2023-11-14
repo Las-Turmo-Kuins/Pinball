@@ -24,10 +24,11 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
+	flippR = App->textures->Load("pinball/flipperR.png");
+	flippL = App->textures->Load("pinball/flipperL.png");
+	mapa = App->textures->Load("pinball/Fondo_pinball.png");
 
-	circle = App->textures->Load("pinball/wheel.png"); 
-	box = App->textures->Load("pinball/crate.png");
-	rick = App->textures->Load("pinball/rick_head.png");
+
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	sensor = App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2, SCREEN_HEIGHT, SCREEN_WIDTH, 50);
@@ -93,6 +94,7 @@ bool ModuleSceneIntro::Start()
 	right = App->physics->CreateRectangle(235, 706, 32, 12, b2_dynamicBody);
 	right_circle = App->physics->CreateCircleStatic(235, 706, 6);
 
+
 	b2RevoluteJointDef rightRevJoint;
 	rightRevJoint.bodyA = right->body;
 	rightRevJoint.bodyB = right_circle->body;
@@ -101,13 +103,15 @@ bool ModuleSceneIntro::Start()
 	rightRevJoint.referenceAngle = 0 * DEGTORAD;
 	rightRevJoint.enableLimit = true;
 	rightRevJoint.lowerAngle = -30 * DEGTORAD;
-	rightRevJoint.upperAngle = 30 * DEGTORAD;
+	rightRevJoint.upperAngle = 50 * DEGTORAD;
 
 	b2RevoluteJoint* joint_right = (b2RevoluteJoint*)App->physics->world->CreateJoint(&rightRevJoint);
 
 	//left flippers
+
 	left = App->physics->CreateRectangle(140, 706, 32, 12, b2_dynamicBody);
 	left_circle = App->physics->CreateCircleStatic(140, 706, 6);
+
 
 	b2RevoluteJointDef leftRevJoint;
 	leftRevJoint.bodyA = left->body;
@@ -116,7 +120,7 @@ bool ModuleSceneIntro::Start()
 	leftRevJoint.localAnchorB.Set(0, 0);
 	leftRevJoint.referenceAngle = 0 * DEGTORAD;
 	leftRevJoint.enableLimit = true;
-	leftRevJoint.lowerAngle = -30 * DEGTORAD;
+	leftRevJoint.lowerAngle = -50 * DEGTORAD;
 	leftRevJoint.upperAngle = 30 * DEGTORAD;
 
 	b2RevoluteJoint* joint_left = (b2RevoluteJoint*)App->physics->world->CreateJoint(&leftRevJoint);
@@ -151,6 +155,8 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+  App->renderer->Blit(mapa, 0, 0);
+  
 	if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
 	{
 		Create();
@@ -163,6 +169,7 @@ update_status ModuleSceneIntro::Update()
 		spring->body->ApplyForce(b2Vec2(0, 21), b2Vec2(0, 0), true);
 	}
 	/*if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+
 	{
 		ray_on = !ray_on;
 		ray.x = App->input->GetMouseX();
@@ -189,6 +196,10 @@ update_status ModuleSceneIntro::Update()
 	{
 		left->body->ApplyForceToCenter(b2Vec2(0, -300), 1);
 	}
+
+	App->renderer->Blit(flippR, 170, 565, NULL, 1.0f,  right->GetRotation());
+
+	App->renderer->Blit(flippL, 65, 570, NULL, 1.0f, left->GetRotation());
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{

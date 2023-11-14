@@ -28,10 +28,16 @@ public:
 	PhysBody* left;
 	PhysBody* left_circle;
 
+
 	PhysBody* spring;
 	PhysBody* springSurface;
 	PhysBody* limit;
+  SDL_Texture* flippR;
+	SDL_Texture* flippL;
+
 	bool sensed;
+
+	SDL_Texture* mapa;
 
 	SDL_Texture* circle;
 	SDL_Texture* box;
