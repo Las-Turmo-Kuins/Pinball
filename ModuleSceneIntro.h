@@ -21,6 +21,8 @@ public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
+	PhysBody* coins[6];
+	PhysBody* triangulos[2];
 	PhysBody* map;
 	PhysBody* sensor;
 	PhysBody* right;
