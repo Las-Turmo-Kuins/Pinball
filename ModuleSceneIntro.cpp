@@ -87,16 +87,7 @@ bool ModuleSceneIntro::Start()
 	232, 637
 	};
 
-	int coin[16] = {
-	110, 72,
-	104, 78,
-	104, 88,
-	109, 93,
-	120, 93,
-	124, 87,
-	124, 78,
-	118, 72
-	};
+	
 	int coin2[16] = {
 	156, 73,
 	149, 78,
@@ -117,16 +108,7 @@ bool ModuleSceneIntro::Start()
 	213, 78,
 	208, 72
 	};
-	int coin4[16] = {
-	243, 74,
-	238, 78,
-	237, 88,
-	243, 94,
-	252, 94,
-	258, 88,
-	258, 78,
-	252, 72
-	};
+	
 	int coin5[16] = {
 	50, 17,
 	44, 23,
@@ -178,13 +160,13 @@ bool ModuleSceneIntro::Start()
 	map->body->SetType(b2_staticBody);
 	map->body->GetFixtureList()->SetRestitution(0.5f);
 	//coins
-	coins[0] = App->physics->CreateChain(0, 0, coin, 16);
-	coins[1] = App->physics->CreateChain(0, 0, coin2, 16);
-	coins[2] = App->physics->CreateChain(0, 0, coin3, 16);
-	coins[3] = App->physics->CreateChain(0, 0, coin4, 16);
-	coins[4] = App->physics->CreateChain(0, 0, coin5, 16);
-	coins[5] = App->physics->CreateChain(0, 0, coin6, 16);
-	for (int i = 0; i < 6; i++)
+	
+	coins[0] = App->physics->CreateChain(0, 0, coin2, 16);
+	coins[1] = App->physics->CreateChain(0, 0, coin3, 16);
+	
+	coins[2] = App->physics->CreateChain(0, 0, coin5, 16);
+	coins[3] = App->physics->CreateChain(0, 0, coin6, 16);
+	for (int i = 0; i < 4; i++)
 	{
 		coins[i]->body->SetType(b2_staticBody);
 		coins[i]->body->GetFixtureList()->SetRestitution(1.0f);
