@@ -26,12 +26,15 @@ public:
 	PhysBody* barriles[4];
 	PhysBody* map;
 	PhysBody* sensor;
+	PhysBody* BarrilSensors1;
+	PhysBody* HatSensors2;
+	PhysBody* CoinsSensors3;
 	PhysBody* right;
 	PhysBody* right_circle;
 	PhysBody* left;
 	PhysBody* left_circle;
 
-
+	PhysBody* Death;
 	PhysBody* spring;
 	PhysBody* springSurface;
 	PhysBody* limit;

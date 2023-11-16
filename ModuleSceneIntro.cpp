@@ -232,10 +232,19 @@ bool ModuleSceneIntro::Start()
 		barriles[i]->body->GetFixtureList()->SetRestitution(1.0f);
 	}
 	//flippers
+	// 
 	//right flippers
 	right = App->physics->CreateRectangle(225, flippery, 64, 12, b2_dynamicBody);
 	right_circle = App->physics->CreateCircleStatic(225, flippery, 6);
 
+	//left flippers
+
+	left = App->physics->CreateRectangle(100, flippery, 64, 12, b2_dynamicBody);
+	left_circle = App->physics->CreateCircleStatic(100, flippery, 6);
+
+	//Sensor de muerte
+	Death = App->physics->CreateRectangleSensor(185, 837, 120, 15);
+	Death->listener = this;
 
 	b2RevoluteJointDef rightRevJoint;
 	rightRevJoint.bodyA = right->body;
@@ -248,11 +257,6 @@ bool ModuleSceneIntro::Start()
 	rightRevJoint.upperAngle = 50 * DEGTORAD;
 
 	b2RevoluteJoint* joint_right = (b2RevoluteJoint*)App->physics->world->CreateJoint(&rightRevJoint);
-
-	//left flippers
-
-	left = App->physics->CreateRectangle(100, flippery, 64, 12, b2_dynamicBody);
-	left_circle = App->physics->CreateCircleStatic(100, flippery, 6);
 
 
 	b2RevoluteJointDef leftRevJoint;
