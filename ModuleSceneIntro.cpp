@@ -444,7 +444,7 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	//Yellow Rectangle
-	App->renderer->Blit(YellowRectangle, 219, 552, NULL, 0.5f);
+	App->renderer->Blit(YellowRectangle, 360, 570, NULL, 0.5f);
 
 	int springX, springY;
 	spring->GetPosition(springX, springY);
