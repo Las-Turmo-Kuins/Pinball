@@ -28,6 +28,7 @@ bool ModuleSceneIntro::Start()
 	flippR = App->textures->Load("pinball/flipperR.png");
 	flippL = App->textures->Load("pinball/flipperL.png");
 	mapa = App->textures->Load("pinball/Fondo_pinball.png");
+	YellowRectangle = App->textures->Load("pinball/YellowRectangle.png");
 
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
@@ -443,7 +444,7 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	//Yellow Rectangle
-	App->renderer->Blit(YellowRectangle, 19, 52, NULL, 1.0f);
+	App->renderer->Blit(YellowRectangle, 219, 552, NULL, 0.5f);
 
 	int springX, springY;
 	spring->GetPosition(springX, springY);
