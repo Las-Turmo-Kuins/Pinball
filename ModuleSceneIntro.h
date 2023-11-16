@@ -34,7 +34,10 @@ public:
 	PhysBody* left;
 	PhysBody* left_circle;
 
-	PhysBody* Death;
+	//Bonus
+	bool Bonus1;
+
+
 	PhysBody* spring;
 	PhysBody* springSurface;
 	PhysBody* limit;
@@ -52,4 +55,19 @@ public:
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
+
+	
+
+	//Rectangulo amarillo del Score
+	SDL_Texture* YellowRectangle;
+
+	SDL_Texture* canonball;
+
+
+	int lives = 4;
+	int score = 0000;
+	int Bbonus = 0;
+	int scoreFont = -1;
+	int scoreFont2 = -1;
+	char scoreText[10] = { "\0" };
 };

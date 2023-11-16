@@ -238,9 +238,6 @@ bool ModuleSceneIntro::Start()
 	left = App->physics->CreateRectangle(100, flippery, 64, 12, b2_dynamicBody);
 	left_circle = App->physics->CreateCircleStatic(100, flippery, 6);
 
-	//Sensor de muerte
-	Death = App->physics->CreateRectangleSensor(185, 837, 120, 15);
-	Death->listener = this;
 
 	b2RevoluteJointDef rightRevJoint;
 	rightRevJoint.bodyA = right->body;
@@ -453,6 +450,72 @@ void ModuleSceneIntro::Create()
 	circles.getLast()->data->listener = this;
 	circles.getLast()->data->body->SetBullet(true);
 }
+
+void ModulePhysics::BeginContact(b2Contact* contact)
+{
+	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
+	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
+
+	if (physA == App->scene_intro->BarrilSensors1 ) {
+		App->scene_intro->score += 200;
+		App->audio->PlayFx(bonusFx);
+	}
+
+	if (physA == App->scene_intro->Bon1)
+	{
+		App->audio->PlayFx(bonus_fx);
+		App->scene_intro->score += 200;
+		App->scene_intro->Bonus1 = true;
+	}
+	if (physA == App->scene_intro->Bon2)
+	{
+		App->audio->PlayFx(bonus_fx);
+		App->scene_intro->score += 200;
+		App->scene_intro->Bonus2 = true;
+
+
+	}
+	if (physA == App->scene_intro->Bon3)
+	{
+		App->audio->PlayFx(bonus_fx);
+		App->scene_intro->score += 200;
+		App->scene_intro->Bonus3 = true;
+
+	}
+
+	if (physA == App->scene_intro->Death)
+	{
+		App->audio->PlayFx(dieFx);
+		App->player->death = true;
+	}
+
+	if (physA == App->scene_intro->LilBumperSensor)
+	{
+		App->player->stuck = true;
+	}
+
+	if (physA == App->scene_intro->triangleL) {
+		App->scene_intro->score += 200;
+		App->audio->PlayFx(trianFx);
+	}
+	if (physA == App->scene_intro->triangleR) {
+		App->scene_intro->score += 200;
+		App->audio->PlayFx(trianFx);
+	}
+
+	if (physA == App->scene_intro->springSensor && App->player->muell == true)
+	{
+		App->player->closeDoor = true;
+	}
+
+
+	if (physA && physA->listener != NULL)
+		physA->listener->OnCollision(physA, physB);
+
+	if (physB && physB->listener != NULL)
+		physB->listener->OnCollision(physB, physA);
+}
+
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
