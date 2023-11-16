@@ -188,10 +188,10 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateBumper(int x, int y, int* points, int size)
+PhysBody* ModulePhysics::CreateReboundChain(int x, int y, int* points, int size)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	body.type = b2_staticBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -209,6 +209,7 @@ PhysBody* ModulePhysics::CreateBumper(int x, int y, int* points, int size)
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
+	fixture.restitution = 1, 1;
 
 	b->CreateFixture(&fixture);
 
@@ -220,6 +221,30 @@ PhysBody* ModulePhysics::CreateBumper(int x, int y, int* points, int size)
 	pbody->width = pbody->height = 0;
 
 	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateBumper(int x, int y, int radius)
+{
+		b2BodyDef body;
+		body.type = b2_kinematicBody;
+		body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+		b2Body* b = world->CreateBody(&body);
+
+		b2CircleShape shape;
+		shape.m_radius = PIXEL_TO_METERS(radius);
+		b2FixtureDef fixture;
+		fixture.shape = &shape;
+		fixture.restitution = 1, 1;
+
+		b->CreateFixture(&fixture);
+
+		PhysBody* pbody = new PhysBody();
+		pbody->body = b;
+		b->SetUserData(pbody);
+		pbody->width = pbody->height = radius;
+
+		return pbody;
 }
 
 // 
