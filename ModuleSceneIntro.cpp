@@ -6,6 +6,7 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModuleFonts.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -441,8 +442,73 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
 
+	//Yellow Rectangle
+	App->renderer->Blit(YellowRectangle, 19, 52, NULL, 1.0f);
+
+	int springX, springY;
+	spring->GetPosition(springX, springY);
+	App->renderer->Blit(springTex, springX, springY, NULL, 1.0f, spring->GetRotation());
+
+
+	sprintf_s(scoreText, 10, "%8d", score);
+	App->fonts->BlitText(20, 50, scoreFont, scoreText);
+
+
+	App->renderer->DrawQuad({ 340,50,40,20 }, 0, 0, 0);
+	sprintf_s(scoreText, 10, "%2d", lives);
+	App->fonts->BlitText(355, 50, scoreFont, scoreText);
+
+
+	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
+	{
+		LOG("add 100 score");
+		score += 100;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+
+		lives = 0;
+	}
+
+	//if (lives == 0)
+	//{
+	//	if (Mute)
+	//	{
+	//		App->player->door = false;
+	//		App->physics->world->DestroyBody(App->player->ball->body);
+	//		char lookupTable[] = { "0123456789 0123456789" };
+	//		scoreFont2 = App->fonts->Load("pinball/fonts/font2.png", lookupTable, 2);
+
+	//		GameOver = App->textures->Load("pinball/GameOver.png");
+	//		App->audio->PlayMusic("pinball/Audio/NoMusic.ogg");
+	//		App->audio->PlayFx(Sus);
+	//		Mute = false;
+	//	}
+	//	App->renderer->Blit(GameOver, 0, 120, NULL);
+
+	//	sprintf_s(scoreText, 10, "%8d", score);
+	//	App->fonts->BlitText(90, 330, scoreFont2, scoreText);
+
+
+	//	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	//	{
+	//		lives = 5;
+	//		score = 0;
+	//		MusicOn = true;
+	//		Mute = true;
+	//		App->player->ball = App->physics->CreateCircle(385, 477, 9.5);
+	//		App->player->ball->listener = this;
+
+	//		//App->textures->Unload(GameOver);
+	//	}
+	//}
+
 	return UPDATE_CONTINUE;
 }
+
+	
+
 void ModuleSceneIntro::Create()
 {
 
@@ -451,70 +517,7 @@ void ModuleSceneIntro::Create()
 	circles.getLast()->data->body->SetBullet(true);
 }
 
-void ModulePhysics::BeginContact(b2Contact* contact)
-{
-	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
-	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
 
-	if (physA == App->scene_intro->BarrilSensors1 ) {
-		App->scene_intro->score += 200;
-		App->audio->PlayFx(bonusFx);
-	}
-
-	if (physA == App->scene_intro->Bon1)
-	{
-		App->audio->PlayFx(bonus_fx);
-		App->scene_intro->score += 200;
-		App->scene_intro->Bonus1 = true;
-	}
-	if (physA == App->scene_intro->Bon2)
-	{
-		App->audio->PlayFx(bonus_fx);
-		App->scene_intro->score += 200;
-		App->scene_intro->Bonus2 = true;
-
-
-	}
-	if (physA == App->scene_intro->Bon3)
-	{
-		App->audio->PlayFx(bonus_fx);
-		App->scene_intro->score += 200;
-		App->scene_intro->Bonus3 = true;
-
-	}
-
-	if (physA == App->scene_intro->Death)
-	{
-		App->audio->PlayFx(dieFx);
-		App->player->death = true;
-	}
-
-	if (physA == App->scene_intro->LilBumperSensor)
-	{
-		App->player->stuck = true;
-	}
-
-	if (physA == App->scene_intro->triangleL) {
-		App->scene_intro->score += 200;
-		App->audio->PlayFx(trianFx);
-	}
-	if (physA == App->scene_intro->triangleR) {
-		App->scene_intro->score += 200;
-		App->audio->PlayFx(trianFx);
-	}
-
-	if (physA == App->scene_intro->springSensor && App->player->muell == true)
-	{
-		App->player->closeDoor = true;
-	}
-
-
-	if (physA && physA->listener != NULL)
-		physA->listener->OnCollision(physA, physB);
-
-	if (physB && physB->listener != NULL)
-		physB->listener->OnCollision(physB, physA);
-}
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {

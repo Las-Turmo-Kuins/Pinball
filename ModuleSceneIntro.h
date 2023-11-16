@@ -40,6 +40,8 @@ public:
 
 	PhysBody* spring;
 	PhysBody* springSurface;
+	SDL_Texture* springTex;
+
 	PhysBody* limit;
 	SDL_Texture* flippR;
 	SDL_Texture* flippL;

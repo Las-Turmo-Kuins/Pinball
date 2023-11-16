@@ -3,6 +3,8 @@
 #include "ModuleInput.h"
 #include "ModuleRender.h"
 #include "ModulePhysics.h"
+#include "ModuleSceneIntro.h"
+#include "p2Point.h"
 #include "p2Point.h"
 #include "math.h"
 
@@ -443,4 +445,23 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
+	
+
+	if (physA == App->scene_intro->BarrilSensors1) {
+		App->scene_intro->score += 200;
+	}
+
+	if (physA == App->scene_intro->CoinsSensors3)
+	{
+		App->scene_intro->score += 100;
+		App->scene_intro->Bonus1 = true;
+	}
+	if (physA == App->scene_intro->HatSensors2)
+	{
+
+		App->scene_intro->score += 200;
+		App->scene_intro->Bonus1 = true;
+
+	}
+
 }
