@@ -203,34 +203,30 @@ bool ModuleSceneIntro::Start()
 	map->body->GetFixtureList()->SetRestitution(0.5f);
 	//coins
 	
-	coins[0] = App->physics->CreateChain(0, 0, coin2, 16);
-	coins[1] = App->physics->CreateChain(0, 0, coin3, 16);
+	coins[0] = App->physics->CreateBumper(158, 83, 9 );
+	coins[1] = App->physics->CreateBumper(202, 83, 9);
+	coins[0]->listener = this;
+	coins[1]->listener = this;
 	
-	coins[2] = App->physics->CreateChain(0, 0, coin5, 16);
-	coins[3] = App->physics->CreateChain(0, 0, coin6, 16);
-	for (int i = 0; i < 4; i++)
-	{
-		coins[i]->body->SetType(b2_staticBody);
-		coins[i]->body->GetFixtureList()->SetRestitution(1.0f);
-	}
+	coins[3] = App->physics->CreateBigBumper(32, 88, 10);
+	coins[4] = App->physics->CreateBigBumper(283, 152, 10);
+	coins[3]->listener = this;
+	coins[4]->listener = this;
+	
 	//triangulos laterales
-	triangulos[0] = App->physics->CreateChain(0, 0, trianguloiz, 22);
-	triangulos[1] = App->physics->CreateChain(0, 0, triangulode, 22);
-	for (int i = 0; i < 2; i++)
-	{
-		triangulos[i]->body->SetType(b2_staticBody);
-		triangulos[i]->body->GetFixtureList()->SetRestitution(1.0f);
-	}
+	triangulos[0] = App->physics->CreateReboundChain(0, 0, trianguloiz, 22);
+	triangulos[1] = App->physics->CreateReboundChain(0, 0, triangulode, 22);
+	triangulos[0]->listener = this;
+	triangulos[1]->listener = this;
 
-	barriles[0] = App->physics->CreateChain(0, 0, bola1, 16);
-	barriles[1] = App->physics->CreateChain(0, 0, bola2, 16);
-	barriles[2] = App->physics->CreateChain(0, 0, bola3, 16);
-	barriles[3] = App->physics->CreateChain(0, 0, bola4, 16);
-	for (int i = 0; i < 4; i++)
-	{
-		barriles[i]->body->SetType(b2_staticBody);
-		barriles[i]->body->GetFixtureList()->SetRestitution(1.0f);
-	}
+	barriles[0] = App->physics->CreateBumper(128, 166, 23);
+	barriles[1] = App->physics->CreateBumper(194, 223, 23);
+	barriles[2] = App->physics->CreateBumper(230, 154, 23);
+	barriles[3] = App->physics->CreateBumper(68, 137, 15 );
+	barriles[0]->listener = this;
+	barriles[1]->listener = this;
+	barriles[2]->listener = this;
+	barriles[3]->listener = this;
 	//flippers
 	// 
 	//right flippers

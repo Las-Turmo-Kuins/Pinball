@@ -246,7 +246,29 @@ PhysBody* ModulePhysics::CreateBumper(int x, int y, int radius)
 
 		return pbody;
 }
+PhysBody* ModulePhysics::CreateBigBumper(int x, int y, int radius)
+{
+	b2BodyDef body;
+	body.type = b2_kinematicBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.restitution = 2, 2;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = radius;
+
+	return pbody;
+}
 // 
 update_status ModulePhysics::PostUpdate()
 {

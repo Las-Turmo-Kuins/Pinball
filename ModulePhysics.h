@@ -49,6 +49,7 @@ public:
 	PhysBody* CreateReboundChain(int x, int y, int* points, int size);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 	PhysBody* CreateBumper(int x, int y, int radius);
+	PhysBody* CreateBigBumper(int x, int y, int radius);
 
 	b2World* world;
 	// b2ContactListener ---
