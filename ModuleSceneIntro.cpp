@@ -28,8 +28,13 @@ bool ModuleSceneIntro::Start()
 	flippR = App->textures->Load("pinball/flipperR.png");
 	flippL = App->textures->Load("pinball/flipperL.png");
 	mapa = App->textures->Load("pinball/Fondo_pinball.png");
+
+
 	YellowRectangle = App->textures->Load("pinball/YellowRectangle.png");
 
+	//Score
+	char lookupTable[] = { "0123456789 0123456789" };
+	scoreFont = App->fonts->Load("pinball/fonts/font1.png", lookupTable, 2);
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
@@ -458,6 +463,7 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->DrawQuad({ 340,50,40,20 }, 0, 0, 0);
 	sprintf_s(scoreText, 10, "%2d", lives);
 	App->fonts->BlitText(355, 50, scoreFont, scoreText);
+	//App->renderer->Blit(Heart, 340, 53, NULL);
 
 
 	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
