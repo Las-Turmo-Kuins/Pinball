@@ -17,6 +17,7 @@ public:
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 	void Create();
+	void Destroy();
 public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
@@ -29,7 +30,8 @@ public:
 	PhysBody* right_circle;
 	PhysBody* left;
 	PhysBody* left_circle;
-
+	PhysBody* end;
+	PhysBody* toDestroy;
 
 	PhysBody* spring;
 	PhysBody* springSurface;
@@ -39,6 +41,7 @@ public:
 	int flippery = 585;
 
 	bool sensed;
+	bool create = false;
 
 	SDL_Texture* mapa;
 
@@ -48,4 +51,5 @@ public:
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
+	int lives = 0;
 };

@@ -177,6 +177,7 @@ bool ModuleSceneIntro::Start()
 	map = App->physics->CreateChain(0, 0, map_data, 102);
 	map->body->SetType(b2_staticBody);
 	map->body->GetFixtureList()->SetRestitution(0.5f);
+	end = App->physics->CreateRectangleSensor(83, 639, 400, 10);
 	//coins
 	//coins[0] = App->physics->CreateChain(0, 0, coin, 16);
 	coins[0] = App->physics->CreateChain(0, 0, coin2, 16);
@@ -265,10 +266,18 @@ update_status ModuleSceneIntro::Update()
 {
   App->renderer->Blit(mapa, 0, 0);
   
-	if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
-	{
-		Create();
-	}
+  if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN && lives == 0)
+  {
+	  create = true;
+	  lives = 5;
+	
+
+  }
+  if (create == true && lives > 0)
+  {
+	  Create();
+  }
+  Destroy();
 	//
 	spring->body->ApplyForce(b2Vec2(0, -20), b2Vec2(0, 0), true);
 
@@ -412,17 +421,31 @@ update_status ModuleSceneIntro::Update()
 
 	return UPDATE_CONTINUE;
 }
+void ModuleSceneIntro::Destroy() {
+
+	if (toDestroy != nullptr) {
+		App->physics->world->DestroyBody(toDestroy->body);
+		toDestroy = nullptr;
+	}
+}
 void ModuleSceneIntro::Create()
 {
 
 	circles.add(App->physics->CreateCircle(345, 500, 8, b2_dynamicBody));
 	circles.getLast()->data->listener = this;
 	circles.getLast()->data->body->SetBullet(true);
+	create = false;
 }
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
+	if (bodyB == end) {
+		toDestroy = circles.getLast()->data;
+		circles.clear();
+		lives--;
+		create = true;
+	}
 	App->audio->PlayFx(bonus_fx);
 
 	/*
