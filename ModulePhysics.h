@@ -12,6 +12,15 @@
 #define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
 
+enum class ColliderType {
+
+	BALL,
+	BARRIL,
+	MONEDAS2,
+	SOMBREROS,
+	MONEDAS
+};
+
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
@@ -28,6 +37,7 @@ public:
 	int width, height;
 	b2Body* body;
 	Module* listener;
+	ColliderType collidertype;
 };
 
 // Module --------------------------------------
@@ -46,7 +56,10 @@ public:
 	PhysBody* CreateCircleStatic(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
+	PhysBody* CreateReboundChain(int x, int y, int* points, int size);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
+	PhysBody* CreateBumper(int x, int y, int radius);
+	PhysBody* CreateBigBumper(int x, int y, int radius);
 
 	b2World* world;
 	// b2ContactListener ---
@@ -57,4 +70,6 @@ private:
 	bool debug;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
+
+	uint bonusFx;
 };

@@ -3,6 +3,8 @@
 #include "ModuleInput.h"
 #include "ModuleRender.h"
 #include "ModulePhysics.h"
+#include "ModuleSceneIntro.h"
+#include "p2Point.h"
 #include "p2Point.h"
 #include "math.h"
 
@@ -188,6 +190,87 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
+PhysBody* ModulePhysics::CreateReboundChain(int x, int y, int* points, int size)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2ChainShape shape;
+	b2Vec2* p = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	shape.CreateLoop(p, size / 2);
+
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.restitution = 1, 1;
+
+	b->CreateFixture(&fixture);
+
+	delete p;
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateBumper(int x, int y, int radius)
+{
+		b2BodyDef body;
+		body.type = b2_kinematicBody;
+		body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+		b2Body* b = world->CreateBody(&body);
+
+		b2CircleShape shape;
+		shape.m_radius = PIXEL_TO_METERS(radius);
+		b2FixtureDef fixture;
+		fixture.shape = &shape;
+		fixture.restitution = 1, 1;
+
+		b->CreateFixture(&fixture);
+
+		PhysBody* pbody = new PhysBody();
+		pbody->body = b;
+		b->SetUserData(pbody);
+		pbody->width = pbody->height = radius;
+
+		return pbody;
+}
+PhysBody* ModulePhysics::CreateBigBumper(int x, int y, int radius)
+{
+	b2BodyDef body;
+	body.type = b2_kinematicBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.restitution = 2, 2;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = radius;
+
+	return pbody;
+}
 // 
 update_status ModulePhysics::PostUpdate()
 {
@@ -381,4 +464,31 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
+	
+
+	if ((physA->collidertype == ColliderType::BARRIL && physB->collidertype == ColliderType::BALL) 
+		|| (physA->collidertype == ColliderType::BALL && physB->collidertype == ColliderType::BARRIL)) {
+		App->scene_intro->score += 200;
+	}
+
+	if (physA->collidertype == ColliderType::MONEDAS && physB->collidertype == ColliderType::BALL)
+	{
+		App->scene_intro->score += 100;
+		App->scene_intro->Bonus1 = true;
+	}
+
+	if (physA->collidertype == ColliderType::MONEDAS2 && physB->collidertype == ColliderType::BALL)
+	{
+		App->scene_intro->score += 500;
+		App->scene_intro->Bonus1 = true;
+	}
+
+	if (physA->collidertype == ColliderType::SOMBREROS && physB->collidertype == ColliderType::BALL)
+	{
+
+		App->scene_intro->score += 200;
+		App->scene_intro->Bonus1 = true;
+
+	}
+
 }
