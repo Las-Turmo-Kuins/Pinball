@@ -27,7 +27,7 @@ bool ModuleSceneIntro::Start()
 	flippR = App->textures->Load("pinball/flipperR.png");
 	flippL = App->textures->Load("pinball/flipperL.png");
 	mapa = App->textures->Load("pinball/Fondo_pinball.png");
-
+	bola = App->textures->Load("pinball/Canonball.png");
 	App->audio->PlayMusic("pinball/Bonus.ogg");
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
@@ -404,6 +404,15 @@ update_status ModuleSceneIntro::Update()
 		int x, y;
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+	c = circles.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(bola, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 

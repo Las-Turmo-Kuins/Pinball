@@ -44,7 +44,7 @@ public:
 	bool create = false;
 
 	SDL_Texture* mapa;
-
+	SDL_Texture* bola;
 	SDL_Texture* circle;
 	SDL_Texture* box;
 	SDL_Texture* rick;
