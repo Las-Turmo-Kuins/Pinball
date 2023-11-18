@@ -18,7 +18,7 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 {
 	world = NULL;
 	mouse_joint = NULL;
-	debug = true;
+	debug = false;
 }
 
 // Destructor
@@ -32,6 +32,7 @@ bool ModulePhysics::Start()
 
 	coin_fx = App->audio->LoadFx("pinball/Coin_7.wav");
 	barrel_Fx = App->audio->LoadFx("pinball/Hit_3.wav");
+	cap_Fx = App->audio->LoadFx("pinball/Hit_5.wav");
 	super_Fx = App->audio->LoadFx("pinball/Hit_long.wav");
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
@@ -278,8 +279,9 @@ PhysBody* ModulePhysics::CreateBigBumper(int x, int y, int radius)
 // 
 update_status ModulePhysics::PostUpdate()
 {
-	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
 		debug = !debug;
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
 	{
@@ -496,7 +498,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 		App->scene_intro->score += 200;
 		App->scene_intro->Bonus1 = true;
-		App->audio->PlayFx(super_Fx);
+		App->audio->PlayFx(cap_Fx);
 	}
 
 }

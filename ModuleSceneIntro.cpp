@@ -380,7 +380,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
-		spring->body->ApplyForce(b2Vec2(0, 21), b2Vec2(0, 0), true);
+		spring->body->ApplyForce(b2Vec2(0, 50), b2Vec2(0, 0), true);
 	}
 	/*if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 

@@ -74,6 +74,7 @@ private:
 	uint coin_fx;
 	uint barrel_Fx;
 	uint super_Fx;
+	uint cap_Fx;
 
 	int combo = 0;
 };
