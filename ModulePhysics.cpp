@@ -194,6 +194,25 @@ update_status ModulePhysics::PostUpdate()
 	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
 
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+		gravalt = !gravalt;
+	}
+	if (gravalt)
+	{
+		// Cambiar la gravedad en el eje Y a un valor diferente
+		b2Vec2 newGravity = world->GetGravity();
+		newGravity.y = 2.0f;  // Invertir la dirección de la gravedad en el eje Y
+		world->SetGravity(newGravity);
+	}
+	else
+	{
+		// Cambiar la gravedad en el eje Y a un valor diferente
+		b2Vec2 newGravity = world->GetGravity();
+		newGravity.y = 7.0f;  // Invertir la dirección de la gravedad en el eje Y
+		world->SetGravity(newGravity);
+	}
+
 	if(!debug)
 		return UPDATE_CONTINUE;
 
