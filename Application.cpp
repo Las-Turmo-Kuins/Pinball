@@ -15,6 +15,13 @@
 
 Application::Application()
 {
+	Timer timer = Timer();
+	startupTime = Timer();
+	frameTime = PerfTimer();
+	lastSecFrameTime = PerfTimer();
+
+	frames = 0;
+
 	renderer = new ModuleRender(this);
 	window = new ModuleWindow(this);
 	textures = new ModuleTextures(this);
@@ -43,6 +50,8 @@ Application::Application()
 	
 	// Player
 	AddModule(player);
+
+	LOG("Timer App Constructor: %f", timer.ReadMSec());
 }
 
 Application::~Application()
@@ -59,6 +68,7 @@ Application::~Application()
 bool Application::Init()
 {
 	bool ret = true;
+	Timer timer = Timer();
 
 	// Call Init() in all modules
 	p2List_item<Module*>* item = list_modules.getFirst();
@@ -79,13 +89,60 @@ bool Application::Init()
 			ret = item->data->Start();
 		item = item->next;
 	}
-	
+
+	LOG("Timer App Start(): %f", timer.ReadMSec());
+
 	return ret;
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
+	if (input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		unlimitframes = !unlimitframes;
+	}
+	if (unlimitframes)
+	{
+		maxFrameDuration = 32; //lo porngo a la mitad para ver que va al doble de fps
+	}
+	else
+	{
+		maxFrameDuration = 16;
+	}
+	frameTime.Start();
+	double currentDt = frameTime.ReadMs();
+	if (maxFrameDuration > 0 && currentDt < maxFrameDuration) {
+		uint32 delay = (uint32)(maxFrameDuration - currentDt);
+
+		PerfTimer delayTimer = PerfTimer();
+		SDL_Delay(delay);
+		//LOG("We waited for %I32u ms and got back in %f ms",delay,delayTimer.ReadMs());
+	}
+	// Amount of frames since startup
+	frameCount++;
+
+	// Amount of time since game start (use a low resolution timer)
+	secondsSinceStartup = startupTime.ReadSec();
+
+	// Amount of ms took the last update (dt)
+	dt = (float)frameTime.ReadMs();
+
+	// Amount of frames during the last second
+	lastSecFrameCount++;
+
+	// Average FPS for the whole game life
+	if (lastSecFrameTime.ReadMs() > 1000) {
+		lastSecFrameTime.Start();
+		averageFps = (averageFps + lastSecFrameCount) / 2;
+		framesPerSecond = lastSecFrameCount;
+		lastSecFrameCount = 0;
+	}
+
+	// Shows the time measurements in the window title
+	printf("\r Av.FPS: %.2f Last sec frames: %i Last dt: %.3f Time since startup: %I32u Frame Count: %I64u ",
+		averageFps, framesPerSecond, dt, secondsSinceStartup, frameCount);
+
 	update_status ret = UPDATE_CONTINUE;
 	p2List_item<Module*>* item = list_modules.getFirst();
 
@@ -119,6 +176,7 @@ update_status Application::Update()
 
 bool Application::CleanUp()
 {
+	Timer timer = Timer();
 	bool ret = true;
 	p2List_item<Module*>* item = list_modules.getLast();
 

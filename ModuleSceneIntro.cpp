@@ -34,7 +34,8 @@ bool ModuleSceneIntro::Start()
 	flippR = App->textures->Load("pinball/flipperR.png");
 	flippL = App->textures->Load("pinball/flipperL.png");
 	mapa = App->textures->Load("pinball/Fondo_pinball.png");
-
+	bola = App->textures->Load("pinball/Canonball.png");
+	App->audio->PlayMusic("pinball/Bonus.ogg");
 
 	YellowRectangle = App->textures->Load("pinball/YellowRectangle.png");
 	numsscore = App->textures->Load("pinball/nums.png");
@@ -201,7 +202,7 @@ bool ModuleSceneIntro::Start()
 		252, 144,
 		238, 131
 	};
-	int bola4[16] = {//bola pequeña
+	int bola4[16] = {//bola pequeï¿½a
 		64, 120,
 		53, 130,
 		53, 141,
@@ -215,6 +216,7 @@ bool ModuleSceneIntro::Start()
 	map = App->physics->CreateChain(0, 0, map_data, 102);
 	map->body->SetType(b2_staticBody);
 	map->body->GetFixtureList()->SetRestitution(0.5f);
+	end = App->physics->CreateRectangleSensor(83, 639, 400, 10);
 	//coins
 	
 	coins[0] = App->physics->CreateBumper(158, 83, 9 );
@@ -247,6 +249,7 @@ bool ModuleSceneIntro::Start()
 	coins[4]->collidertype = ColliderType::MONEDAS2;
 	
 	
+
 	//triangulos laterales
 	triangulos[0] = App->physics->CreateReboundChain(0, 0, trianguloiz, 22);
 	triangulos[1] = App->physics->CreateReboundChain(0, 0, triangulode, 22);
@@ -348,10 +351,18 @@ update_status ModuleSceneIntro::Update()
 {
   App->renderer->Blit(mapa, 0, 0);
   
-	if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
-	{
-		Create();
-	}
+  if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN && lives == 0)
+  {
+	  create = true;
+	  lives = 5;
+	
+
+  }
+  if (create == true && lives > 0)
+  {
+	  Create();
+  }
+  Destroy();
 	//
 	spring->body->ApplyForce(b2Vec2(0, -20), b2Vec2(0, 0), true);
 
@@ -388,9 +399,9 @@ update_status ModuleSceneIntro::Update()
 		left->body->ApplyForceToCenter(b2Vec2(0, -150), 1);
 	}
 
-	App->renderer->Blit(flippR, 168, 575, NULL, 1.0f,  right->GetRotation());
+	App->renderer->Blit(flippR, 168, 565, NULL, 1.0f,  right->GetRotation());
 
-	App->renderer->Blit(flippL, 50, 575, NULL, 1.0f, left->GetRotation());
+	App->renderer->Blit(flippL, 50, 565, NULL, 1.0f, left->GetRotation());
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
@@ -477,6 +488,15 @@ update_status ModuleSceneIntro::Update()
 		int x, y;
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
+		c = c->next;
+	}
+	c = circles.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+		App->renderer->Blit(bola, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 
@@ -578,7 +598,13 @@ update_status ModuleSceneIntro::Update()
 	return UPDATE_CONTINUE;
 }
 
-	
+void ModuleSceneIntro::Destroy() {
+
+	if (toDestroy != nullptr) {
+		App->physics->world->DestroyBody(toDestroy->body);
+		toDestroy = nullptr;
+	}
+}
 
 void ModuleSceneIntro::Create()
 {
@@ -587,6 +613,7 @@ void ModuleSceneIntro::Create()
 	circles.getLast()->data->listener = this;
 	circles.getLast()->data->collidertype = ColliderType::BALL;
 	circles.getLast()->data->body->SetBullet(true);
+	create = false;
 }
 
 
@@ -595,6 +622,12 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
 
+	if (bodyB == end) {
+		toDestroy = circles.getLast()->data;
+		circles.clear();
+		lives--;
+		create = true;
+	}
 	App->audio->PlayFx(bonus_fx);
 
 	/*

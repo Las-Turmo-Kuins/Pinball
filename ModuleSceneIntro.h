@@ -17,11 +17,14 @@ public:
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 	void Create();
+	void Destroy();
 public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
+
 	PhysBody* coins[9];
+
 	PhysBody* triangulos[2];
 	PhysBody* barriles[4];
 	PhysBody* map;
@@ -34,8 +37,8 @@ public:
 	PhysBody* left;
 	PhysBody* left_circle;
 
-	//Bonus
-	bool Bonus1;
+	PhysBody* end;
+	PhysBody* toDestroy;
 
 
 	PhysBody* spring;
@@ -45,18 +48,20 @@ public:
 	PhysBody* limit;
 	SDL_Texture* flippR;
 	SDL_Texture* flippL;
-	int flippery = 585;
+	int flippery = 575;
 
 	bool sensed;
+	bool create = false;
 
 	SDL_Texture* mapa;
-
+	SDL_Texture* bola;
 	SDL_Texture* circle;
 	SDL_Texture* box;
 	SDL_Texture* rick;
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
+
 
 	
 
@@ -68,11 +73,14 @@ public:
 	SDL_Texture* canonball;
 
 
-	int lives = 4;
+	
 	int score = 0000;
 	int highScore=0;
 	int Bbonus = 0;
 	int scoreFont = -1;
 	int scoreFont2 = -1;
 	char scoreText[10] = { "\0" };
+
+	int lives = 0;
+
 };
