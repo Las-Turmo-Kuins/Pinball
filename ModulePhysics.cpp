@@ -447,16 +447,24 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 		physB->listener->OnCollision(physB, physA);
 	
 
-	if (physA == App->scene_intro->BarrilSensors1) {
+	if ((physA->collidertype == ColliderType::BARRIL && physB->collidertype == ColliderType::BALL) 
+		|| (physA->collidertype == ColliderType::BALL && physB->collidertype == ColliderType::BARRIL)) {
 		App->scene_intro->score += 200;
 	}
 
-	if (physA == App->scene_intro->CoinsSensors3)
+	if (physA->collidertype == ColliderType::MONEDAS && physB->collidertype == ColliderType::BALL)
 	{
 		App->scene_intro->score += 100;
 		App->scene_intro->Bonus1 = true;
 	}
-	if (physA == App->scene_intro->HatSensors2)
+
+	if (physA->collidertype == ColliderType::MONEDAS2 && physB->collidertype == ColliderType::BALL)
+	{
+		App->scene_intro->score += 500;
+		App->scene_intro->Bonus1 = true;
+	}
+
+	if (physA->collidertype == ColliderType::SOMBREROS && physB->collidertype == ColliderType::BALL)
 	{
 
 		App->scene_intro->score += 200;

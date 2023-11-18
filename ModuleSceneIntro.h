@@ -63,11 +63,14 @@ public:
 	//Rectangulo amarillo del Score
 	SDL_Texture* YellowRectangle;
 
+	SDL_Rect scorerect[10];
+	SDL_Texture* numsscore;
 	SDL_Texture* canonball;
 
 
 	int lives = 4;
 	int score = 0000;
+	int highScore=0;
 	int Bbonus = 0;
 	int scoreFont = -1;
 	int scoreFont2 = -1;

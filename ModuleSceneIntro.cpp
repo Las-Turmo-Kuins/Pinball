@@ -8,6 +8,12 @@
 #include "ModulePhysics.h"
 #include "ModuleFonts.h"
 
+using namespace std;
+
+#include <fstream>
+#include <iostream>
+#include <string>
+
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	circle = box = rick = NULL;
@@ -31,6 +37,7 @@ bool ModuleSceneIntro::Start()
 
 
 	YellowRectangle = App->textures->Load("pinball/YellowRectangle.png");
+	numsscore = App->textures->Load("pinball/nums.png");
 
 	//Score
 	char lookupTable[] = { "0123456789 0123456789" };
@@ -214,17 +221,24 @@ bool ModuleSceneIntro::Start()
 	coins[1] = App->physics->CreateBumper(202, 83, 9);
 	coins[0]->listener = this;
 	coins[1]->listener = this;
+	coins[0]->collidertype = ColliderType::MONEDAS;
+	coins[1]->collidertype = ColliderType::MONEDAS;
 	
 	coins[3] = App->physics->CreateBigBumper(32, 88, 10);
 	coins[4] = App->physics->CreateBigBumper(283, 152, 10);
 	coins[3]->listener = this;
 	coins[4]->listener = this;
+	coins[3]->collidertype = ColliderType::MONEDAS2;
+	coins[4]->collidertype = ColliderType::MONEDAS2;
+	
 	
 	//triangulos laterales
 	triangulos[0] = App->physics->CreateReboundChain(0, 0, trianguloiz, 22);
 	triangulos[1] = App->physics->CreateReboundChain(0, 0, triangulode, 22);
 	triangulos[0]->listener = this;
 	triangulos[1]->listener = this;
+	triangulos[0]->collidertype = ColliderType::SOMBREROS;
+	triangulos[1]->collidertype = ColliderType::SOMBREROS;
 
 	barriles[0] = App->physics->CreateBumper(128, 166, 23);
 	barriles[1] = App->physics->CreateBumper(194, 223, 23);
@@ -234,8 +248,12 @@ bool ModuleSceneIntro::Start()
 	barriles[1]->listener = this;
 	barriles[2]->listener = this;
 	barriles[3]->listener = this;
+	barriles[0]->collidertype = ColliderType::BARRIL;
+	barriles[1]->collidertype = ColliderType::BARRIL;
+	barriles[2]->collidertype = ColliderType::BARRIL;
+	barriles[3]->collidertype = ColliderType::BARRIL;
 	//flippers
-	// 
+	
 	//right flippers
 	right = App->physics->CreateRectangle(225, flippery, 64, 12, b2_dynamicBody);
 	right_circle = App->physics->CreateCircleStatic(225, flippery, 6);
@@ -287,6 +305,18 @@ bool ModuleSceneIntro::Start()
 	springJoint.lowerTranslation = -0.02;
 	springJoint.upperTranslation = 1;
 	(b2PrismaticJoint*)App->physics->world->CreateJoint(&springJoint);
+
+	fstream file;
+	file.open("score.txt", ios::in);
+	file >> highScore;
+	cout << highScore;
+	file.close();
+
+	for (int i = 0; i < 10; i++)
+	{
+		scorerect[i] = { 1 + 8 * i, 81, 7, 8 };
+	}
+
 	return ret;
 }
 
@@ -456,10 +486,29 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(springTex, springX, springY, NULL, 1.0f, spring->GetRotation());
 
 
-	sprintf_s(scoreText, 10, "%8d", score);
+	LOG( "%8d", score);
 	App->fonts->BlitText(20, 50, scoreFont, scoreText);
 
+	if (score > highScore)
+	{
+		highScore = score;
+		fstream file;
+		file.open("score.txt", ios::out);
+		file.seekp(0);
+		file << highScore;
+		file.close();
+	}
 
+	string sc = to_string(score);
+	int xpos = 400 - (sc.size() * 8);
+	int digit = 0;
+	for (unsigned int i = 0; i < sc.size(); i++)
+	{
+		digit = sc[i] - '0';
+
+		App->renderer->Blit(numsscore, xpos + (i * 8), 580, &scorerect[digit], 0.0f);
+
+	}
 	App->renderer->DrawQuad({ 340,50,40,20 }, 0, 0, 0);
 	sprintf_s(scoreText, 10, "%2d", lives);
 	App->fonts->BlitText(355, 50, scoreFont, scoreText);
@@ -521,6 +570,7 @@ void ModuleSceneIntro::Create()
 
 	circles.add(App->physics->CreateCircle(345, 500, 8, b2_dynamicBody));
 	circles.getLast()->data->listener = this;
+	circles.getLast()->data->collidertype = ColliderType::BALL;
 	circles.getLast()->data->body->SetBullet(true);
 }
 
