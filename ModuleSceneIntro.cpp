@@ -223,7 +223,22 @@ bool ModuleSceneIntro::Start()
 	coins[1]->listener = this;
 	coins[0]->collidertype = ColliderType::MONEDAS;
 	coins[1]->collidertype = ColliderType::MONEDAS;
-	
+	coins[2] = App->physics->CreateBumper(17, 393, 9);
+	coins[5] = App->physics->CreateBumper(17, 493, 9);
+	coins[6] = App->physics->CreateBumper(311, 315, 9);
+	coins[7] = App->physics->CreateBumper(311, 392, 9);
+	coins[8] = App->physics->CreateBumper(311, 492, 9);
+	coins[2]->listener = this;
+	coins[5]->listener = this;
+	coins[6]->listener = this;
+	coins[7]->listener = this;
+	coins[8]->listener = this;
+	coins[2]->collidertype = ColliderType::MONEDAS;
+	coins[5]->collidertype = ColliderType::MONEDAS;	
+	coins[6]->collidertype = ColliderType::MONEDAS;
+	coins[7]->collidertype = ColliderType::MONEDAS;	
+	coins[8]->collidertype = ColliderType::MONEDAS;
+
 	coins[3] = App->physics->CreateBigBumper(32, 88, 10);
 	coins[4] = App->physics->CreateBigBumper(283, 152, 10);
 	coins[3]->listener = this;
