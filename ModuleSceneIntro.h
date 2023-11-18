@@ -38,7 +38,7 @@ public:
 	PhysBody* limit;
 	SDL_Texture* flippR;
 	SDL_Texture* flippL;
-	int flippery = 585;
+	int flippery = 575;
 
 	bool sensed;
 	bool create = false;
