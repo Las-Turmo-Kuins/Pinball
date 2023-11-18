@@ -106,7 +106,7 @@ update_status Application::Update()
 	{
 		maxFrameDuration = 16;
 	}
-
+	frameTime.Start();
 	double currentDt = frameTime.ReadMs();
 	if (maxFrameDuration > 0 && currentDt < maxFrameDuration) {
 		uint32 delay = (uint32)(maxFrameDuration - currentDt);
@@ -172,6 +172,7 @@ update_status Application::Update()
 
 bool Application::CleanUp()
 {
+	Timer timer = Timer();
 	bool ret = true;
 	p2List_item<Module*>* item = list_modules.getLast();
 

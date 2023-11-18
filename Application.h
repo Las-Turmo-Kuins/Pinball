@@ -57,6 +57,7 @@ private:
 	//L02 TODO 1: Set the maximun frame duration in miliseconds.
 	uint32 maxFrameDuration = 16;
 	bool unlimitframes = false;
+	bool limitframes = false;
 
 public:
 
