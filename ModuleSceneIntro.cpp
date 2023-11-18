@@ -28,7 +28,7 @@ bool ModuleSceneIntro::Start()
 	flippL = App->textures->Load("pinball/flipperL.png");
 	mapa = App->textures->Load("pinball/Fondo_pinball.png");
 
-	App->audio->PlayMusic("pinball/bonus.ogg");
+	App->audio->PlayMusic("pinball/Bonus.ogg");
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
