@@ -53,7 +53,7 @@ public:
 	void BeginContact(b2Contact* contact);
 
 private:
-
+	bool gravalt = false;
 	bool debug;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;

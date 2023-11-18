@@ -315,9 +315,9 @@ update_status ModuleSceneIntro::Update()
 		left->body->ApplyForceToCenter(b2Vec2(0, -150), 1);
 	}
 
-	App->renderer->Blit(flippR, 168, 575, NULL, 1.0f,  right->GetRotation());
+	App->renderer->Blit(flippR, 168, 565, NULL, 1.0f,  right->GetRotation());
 
-	App->renderer->Blit(flippL, 50, 575, NULL, 1.0f, left->GetRotation());
+	App->renderer->Blit(flippL, 50, 565, NULL, 1.0f, left->GetRotation());
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
