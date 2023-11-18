@@ -71,5 +71,9 @@ private:
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
 
-	uint bonusFx;
+	uint coin_fx;
+	uint barrel_Fx;
+	uint super_Fx;
+
+	int combo = 0;
 };

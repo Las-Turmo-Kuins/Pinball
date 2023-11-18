@@ -30,6 +30,10 @@ bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
 
+	coin_fx = App->audio->LoadFx("pinball/Coin_7.wav");
+	barrel_Fx = App->audio->LoadFx("pinball/Hit_3.wav");
+	super_Fx = App->audio->LoadFx("pinball/Hit_long.wav");
+
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 	world->SetContactListener(this);
 
@@ -469,18 +473,22 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	if ((physA->collidertype == ColliderType::BARRIL && physB->collidertype == ColliderType::BALL) 
 		|| (physA->collidertype == ColliderType::BALL && physB->collidertype == ColliderType::BARRIL)) {
 		App->scene_intro->score += 200;
+		App->audio->PlayFx(barrel_Fx);
 	}
 
 	if (physA->collidertype == ColliderType::MONEDAS && physB->collidertype == ColliderType::BALL)
 	{
 		App->scene_intro->score += 100;
 		App->scene_intro->Bonus1 = true;
+		App->audio->PlayFx(coin_fx);
 	}
 
 	if (physA->collidertype == ColliderType::MONEDAS2 && physB->collidertype == ColliderType::BALL)
 	{
 		App->scene_intro->score += 500;
 		App->scene_intro->Bonus1 = true;
+		App->audio->PlayFx(super_Fx);
+		combo++;
 	}
 
 	if (physA->collidertype == ColliderType::SOMBREROS && physB->collidertype == ColliderType::BALL)
@@ -488,7 +496,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 		App->scene_intro->score += 200;
 		App->scene_intro->Bonus1 = true;
-
+		App->audio->PlayFx(super_Fx);
 	}
 
 }
