@@ -212,10 +212,28 @@ bool ModuleSceneIntro::Start()
 		85, 132,
 		72, 120
 	};
+
+	int mapa2[18] = {
+	271, 154,
+	272, 145,
+	279, 136,
+	287, 126,
+	306, 148,
+	295, 160,
+	295, 150,
+	286, 140,
+	277, 144
+	};
 	//mapa
 	map = App->physics->CreateChain(0, 0, map_data, 102);
 	map->body->SetType(b2_staticBody);
 	map->body->GetFixtureList()->SetRestitution(0.5f);
+
+
+	map2 = App->physics->CreateChain(0, 0, mapa2, 18);
+	map2->body->SetType(b2_staticBody);
+	map2->body->GetFixtureList()->SetRestitution(0.5f);
+
 	end = App->physics->CreateRectangleSensor(83, 639, 400, 10);
 	//coins
 	
@@ -226,20 +244,20 @@ bool ModuleSceneIntro::Start()
 	coins[0]->collidertype = ColliderType::MONEDAS;
 	coins[1]->collidertype = ColliderType::MONEDAS;
 	coins[2] = App->physics->CreateBumper(17, 393, 9);
-	coins[5] = App->physics->CreateBumper(17, 493, 9);
-	coins[6] = App->physics->CreateBumper(311, 315, 9);
-	coins[7] = App->physics->CreateBumper(311, 392, 9);
-	coins[8] = App->physics->CreateBumper(311, 492, 9);
+	
+	coins[5] = App->physics->CreateBumper(311, 315, 9);
+	coins[6] = App->physics->CreateBumper(311, 392, 9);
+	
 	coins[2]->listener = this;
+	
 	coins[5]->listener = this;
 	coins[6]->listener = this;
-	coins[7]->listener = this;
-	coins[8]->listener = this;
+
 	coins[2]->collidertype = ColliderType::MONEDAS;
-	coins[5]->collidertype = ColliderType::MONEDAS;	
-	coins[6]->collidertype = ColliderType::MONEDAS;
-	coins[7]->collidertype = ColliderType::MONEDAS;	
-	coins[8]->collidertype = ColliderType::MONEDAS;
+		
+	coins[5]->collidertype = ColliderType::MONEDAS;
+	coins[6]->collidertype = ColliderType::MONEDAS;	
+	;
 
 	coins[3] = App->physics->CreateBigBumper(32, 88, 10);
 	coins[4] = App->physics->CreateBigBumper(283, 152, 10);
@@ -351,13 +369,7 @@ update_status ModuleSceneIntro::Update()
 {
   App->renderer->Blit(mapa, 0, 0);
   
-  if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN && lives == 0)
-  {
-	  create = true;
-	  lives = 5;
-	
-
-  }
+  
   if (create == true && lives > 0)
   {
 	  Create();
@@ -366,7 +378,7 @@ update_status ModuleSceneIntro::Update()
 	//
 	spring->body->ApplyForce(b2Vec2(0, -20), b2Vec2(0, 0), true);
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
 	{
 		spring->body->ApplyForce(b2Vec2(0, 21), b2Vec2(0, 0), true);
 	}

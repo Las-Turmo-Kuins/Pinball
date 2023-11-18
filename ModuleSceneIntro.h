@@ -23,11 +23,12 @@ public:
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
 
-	PhysBody* coins[9];
+	PhysBody* coins[7];
 
 	PhysBody* triangulos[2];
 	PhysBody* barriles[4];
 	PhysBody* map;
+	PhysBody* map2;
 	PhysBody* sensor;
 	PhysBody* BarrilSensors1;
 	PhysBody* HatSensors2;
@@ -51,7 +52,7 @@ public:
 	int flippery = 575;
 
 	bool sensed;
-	bool create = false;
+	bool create = true;
 
 	SDL_Texture* mapa;
 	SDL_Texture* bola;
@@ -81,6 +82,6 @@ public:
 	int scoreFont2 = -1;
 	char scoreText[10] = { "\0" };
 	bool Bonus1 = false;
-	int lives = 0;
+	int lives = 5;
 
 };
