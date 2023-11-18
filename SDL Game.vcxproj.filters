@@ -56,6 +56,11 @@
     <ClInclude Include="ModulePhysics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+
+    <ClInclude Include="ModuleFonts.h">
+    <Filter>Header Files</Filter> 
+    </CInclude>
+
     <ClInclude Include="PerfTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -63,6 +68,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Defs.h">
+
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

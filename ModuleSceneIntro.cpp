@@ -6,6 +6,13 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModuleFonts.h"
+
+using namespace std;
+
+#include <fstream>
+#include <iostream>
+#include <string>
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -29,6 +36,13 @@ bool ModuleSceneIntro::Start()
 	mapa = App->textures->Load("pinball/Fondo_pinball.png");
 	bola = App->textures->Load("pinball/Canonball.png");
 	App->audio->PlayMusic("pinball/Bonus.ogg");
+
+	YellowRectangle = App->textures->Load("pinball/YellowRectangle.png");
+	numsscore = App->textures->Load("pinball/nums.png");
+
+	//Score
+	char lookupTable[] = { "0123456789 0123456789" };
+	scoreFont = App->fonts->Load("pinball/fonts/font1.png", lookupTable, 2);
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
@@ -88,16 +102,7 @@ bool ModuleSceneIntro::Start()
 	232, 637
 	};
 
-	int coin[16] = {
-	110, 72,
-	104, 78,
-	104, 88,
-	109, 93,
-	120, 93,
-	124, 87,
-	124, 78,
-	118, 72
-	};
+	
 	int coin2[16] = {
 	156, 73,
 	149, 78,
@@ -118,16 +123,7 @@ bool ModuleSceneIntro::Start()
 	213, 78,
 	208, 72
 	};
-	int coin4[16] = {
-	243, 74,
-	238, 78,
-	237, 88,
-	243, 94,
-	252, 94,
-	258, 88,
-	258, 78,
-	252, 72
-	};
+	
 	int coin5[16] = {
 	50, 17,
 	44, 23,
@@ -174,35 +170,116 @@ bool ModuleSceneIntro::Start()
 	292, 470,
 	298, 460
 	};
+	int bola1[16] = {//primera grande
+	124, 143,
+	107, 155,
+	107, 170,
+	124, 188,
+	135, 187,
+	150, 174,
+	151, 159,
+	135, 143
+	};
+	// Pivot 0, 0
+	int bola2[16] = {//segunda grande
+		188, 198,
+		173, 213,
+		173, 226,
+		188, 244,
+		200, 244,
+		217, 228,
+		216, 215,
+		201, 197
+	};
+	// Pivot 0, 0
+	int bola3[16] = {// tercera bola
+		223, 130,
+		209, 145,
+		209, 158,
+		224, 175,
+		238, 174,
+		253, 159,
+		252, 144,
+		238, 131
+	};
+	int bola4[16] = {//bola peque�a
+		64, 120,
+		53, 130,
+		53, 141,
+		63, 152,
+		71, 153,
+		85, 142,
+		85, 132,
+		72, 120
+	};
 	//mapa
 	map = App->physics->CreateChain(0, 0, map_data, 102);
 	map->body->SetType(b2_staticBody);
 	map->body->GetFixtureList()->SetRestitution(0.5f);
 	end = App->physics->CreateRectangleSensor(83, 639, 400, 10);
 	//coins
-	//coins[0] = App->physics->CreateChain(0, 0, coin, 16);
-	coins[0] = App->physics->CreateChain(0, 0, coin2, 16);
-	coins[1] = App->physics->CreateChain(0, 0, coin3, 16);
-	//coins[3] = App->physics->CreateChain(0, 0, coin4, 16);
-	coins[2] = App->physics->CreateChain(0, 0, coin5, 16);
-	coins[3] = App->physics->CreateChain(0, 0, coin6, 16);
-	for (int i = 0; i < 4; i++)
-	{
-		coins[i]->body->SetType(b2_staticBody);
-		coins[i]->body->GetFixtureList()->SetRestitution(1.0f);
-	}
+	
+	coins[0] = App->physics->CreateBumper(158, 83, 9 );
+	coins[1] = App->physics->CreateBumper(202, 83, 9);
+	coins[0]->listener = this;
+	coins[1]->listener = this;
+	coins[0]->collidertype = ColliderType::MONEDAS;
+	coins[1]->collidertype = ColliderType::MONEDAS;
+	coins[2] = App->physics->CreateBumper(17, 393, 9);
+	coins[5] = App->physics->CreateBumper(17, 493, 9);
+	coins[6] = App->physics->CreateBumper(311, 315, 9);
+	coins[7] = App->physics->CreateBumper(311, 392, 9);
+	coins[8] = App->physics->CreateBumper(311, 492, 9);
+	coins[2]->listener = this;
+	coins[5]->listener = this;
+	coins[6]->listener = this;
+	coins[7]->listener = this;
+	coins[8]->listener = this;
+	coins[2]->collidertype = ColliderType::MONEDAS;
+	coins[5]->collidertype = ColliderType::MONEDAS;	
+	coins[6]->collidertype = ColliderType::MONEDAS;
+	coins[7]->collidertype = ColliderType::MONEDAS;	
+	coins[8]->collidertype = ColliderType::MONEDAS;
+
+	coins[3] = App->physics->CreateBigBumper(32, 88, 10);
+	coins[4] = App->physics->CreateBigBumper(283, 152, 10);
+	coins[3]->listener = this;
+	coins[4]->listener = this;
+	coins[3]->collidertype = ColliderType::MONEDAS2;
+	coins[4]->collidertype = ColliderType::MONEDAS2;
+	
+	
+
 	//triangulos laterales
-	triangulos[0] = App->physics->CreateChain(0, 0, trianguloiz, 22);
-	triangulos[1] = App->physics->CreateChain(0, 0, triangulode, 22);
-	for (int i = 0; i < 2; i++)
-	{
-		triangulos[i]->body->SetType(b2_staticBody);
-		triangulos[i]->body->GetFixtureList()->SetRestitution(1.0f);
-	}
+	triangulos[0] = App->physics->CreateReboundChain(0, 0, trianguloiz, 22);
+	triangulos[1] = App->physics->CreateReboundChain(0, 0, triangulode, 22);
+	triangulos[0]->listener = this;
+	triangulos[1]->listener = this;
+	triangulos[0]->collidertype = ColliderType::SOMBREROS;
+	triangulos[1]->collidertype = ColliderType::SOMBREROS;
+
+	barriles[0] = App->physics->CreateBumper(128, 166, 23);
+	barriles[1] = App->physics->CreateBumper(194, 223, 23);
+	barriles[2] = App->physics->CreateBumper(230, 154, 23);
+	barriles[3] = App->physics->CreateBumper(68, 137, 15 );
+	barriles[0]->listener = this;
+	barriles[1]->listener = this;
+	barriles[2]->listener = this;
+	barriles[3]->listener = this;
+	barriles[0]->collidertype = ColliderType::BARRIL;
+	barriles[1]->collidertype = ColliderType::BARRIL;
+	barriles[2]->collidertype = ColliderType::BARRIL;
+	barriles[3]->collidertype = ColliderType::BARRIL;
 	//flippers
+	
 	//right flippers
 	right = App->physics->CreateRectangle(225, flippery, 64, 12, b2_dynamicBody);
 	right_circle = App->physics->CreateCircleStatic(225, flippery, 6);
+
+	//left flippers
+
+	left = App->physics->CreateRectangle(100, flippery, 64, 12, b2_dynamicBody);
+	left_circle = App->physics->CreateCircleStatic(100, flippery, 6);
 
 
 	b2RevoluteJointDef rightRevJoint;
@@ -216,11 +293,6 @@ bool ModuleSceneIntro::Start()
 	rightRevJoint.upperAngle = 50 * DEGTORAD;
 
 	b2RevoluteJoint* joint_right = (b2RevoluteJoint*)App->physics->world->CreateJoint(&rightRevJoint);
-
-	//left flippers
-
-	left = App->physics->CreateRectangle(100, flippery, 64, 12, b2_dynamicBody);
-	left_circle = App->physics->CreateCircleStatic(100, flippery, 6);
 
 
 	b2RevoluteJointDef leftRevJoint;
@@ -251,6 +323,18 @@ bool ModuleSceneIntro::Start()
 	springJoint.lowerTranslation = -0.02;
 	springJoint.upperTranslation = 1;
 	(b2PrismaticJoint*)App->physics->world->CreateJoint(&springJoint);
+
+	fstream file;
+	file.open("score.txt", ios::in);
+	file >> highScore;
+	cout << highScore;
+	file.close();
+
+	for (int i = 0; i < 10; i++)
+	{
+		scorerect[i] = { 1 + 8 * i, 81, 7, 8 };
+	}
+
 	return ret;
 }
 
@@ -429,8 +513,91 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
 
+	//Yellow Rectangle
+	App->renderer->Blit(YellowRectangle, 360, 570, NULL, 0.5f);
+
+	int springX, springY;
+	spring->GetPosition(springX, springY);
+	App->renderer->Blit(springTex, springX, springY, NULL, 1.0f, spring->GetRotation());
+
+
+	LOG( "%8d", score);
+	App->fonts->BlitText(20, 50, scoreFont, scoreText);
+
+	if (score > highScore)
+	{
+		highScore = score;
+		fstream file;
+		file.open("score.txt", ios::out);
+		file.seekp(0);
+		file << highScore;
+		file.close();
+	}
+
+	string sc = to_string(score);
+	int xpos = 400 - (sc.size() * 8);
+	int digit = 0;
+	for (unsigned int i = 0; i < sc.size(); i++)
+	{
+		digit = sc[i] - '0';
+
+		App->renderer->Blit(numsscore, xpos + (i * 8), 580, &scorerect[digit], 0.0f);
+
+	}
+	App->renderer->DrawQuad({ 340,50,40,20 }, 0, 0, 0);
+	sprintf_s(scoreText, 10, "%2d", lives);
+	App->fonts->BlitText(355, 50, scoreFont, scoreText);
+	//App->renderer->Blit(Heart, 340, 53, NULL);
+
+
+	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
+	{
+		LOG("add 100 score");
+		score += 100;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	{
+
+		lives = 0;
+	}
+
+	//if (lives == 0)
+	//{
+	//	if (Mute)
+	//	{
+	//		App->player->door = false;
+	//		App->physics->world->DestroyBody(App->player->ball->body);
+	//		char lookupTable[] = { "0123456789 0123456789" };
+	//		scoreFont2 = App->fonts->Load("pinball/fonts/font2.png", lookupTable, 2);
+
+	//		GameOver = App->textures->Load("pinball/GameOver.png");
+	//		App->audio->PlayMusic("pinball/Audio/NoMusic.ogg");
+	//		App->audio->PlayFx(Sus);
+	//		Mute = false;
+	//	}
+	//	App->renderer->Blit(GameOver, 0, 120, NULL);
+
+	//	sprintf_s(scoreText, 10, "%8d", score);
+	//	App->fonts->BlitText(90, 330, scoreFont2, scoreText);
+
+
+	//	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+	//	{
+	//		lives = 5;
+	//		score = 0;
+	//		MusicOn = true;
+	//		Mute = true;
+	//		App->player->ball = App->physics->CreateCircle(385, 477, 9.5);
+	//		App->player->ball->listener = this;
+
+	//		//App->textures->Unload(GameOver);
+	//	}
+	//}
+
 	return UPDATE_CONTINUE;
 }
+
 void ModuleSceneIntro::Destroy() {
 
 	if (toDestroy != nullptr) {
@@ -438,14 +605,19 @@ void ModuleSceneIntro::Destroy() {
 		toDestroy = nullptr;
 	}
 }
+
 void ModuleSceneIntro::Create()
 {
 
 	circles.add(App->physics->CreateCircle(345, 500, 8, b2_dynamicBody));
 	circles.getLast()->data->listener = this;
+	circles.getLast()->data->collidertype = ColliderType::BALL;
 	circles.getLast()->data->body->SetBullet(true);
 	create = false;
 }
+
+
+
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
