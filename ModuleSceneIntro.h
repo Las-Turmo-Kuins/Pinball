@@ -80,7 +80,7 @@ public:
 	int scoreFont = -1;
 	int scoreFont2 = -1;
 	char scoreText[10] = { "\0" };
-
+	bool Bonus1 = false;
 	int lives = 0;
 
 };
