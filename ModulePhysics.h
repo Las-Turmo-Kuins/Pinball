@@ -62,6 +62,8 @@ public:
 	PhysBody* CreateBigBumper(int x, int y, int radius);
 
 	b2World* world;
+
+
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
@@ -70,7 +72,7 @@ private:
 	bool debug;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
-
+	b2Body* mouse_body;
 	uint coin_fx;
 	uint barrel_Fx;
 	uint super_Fx;

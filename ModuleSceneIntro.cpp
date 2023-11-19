@@ -145,30 +145,60 @@ bool ModuleSceneIntro::Start()
 	5, -8
 	};
 	int trianguloiz[22] = {
-	33, 453,
-	31, 465,
-	35, 501,
-	31, 525,
-	56, 539,
-	73, 560,
-	81, 559,
-	83, 543,
-	62, 504,
-	53, 477,
-	41, 456
+	36, 459,
+	80, 559,
+	82, 547,
+	80, 536,
+	75, 524,
+	70, 515,
+	63, 505,
+	62, 498,
+	56, 484,
+	52, 471,
+	43, 458
+	};
+	int cuerpotrianguloiz[28] = {
+	34, 457,
+	28, 462,
+	31, 467,
+	33, 476,
+	35, 489,
+	33, 501,
+	31, 514,
+	31, 528,
+	46, 534,
+	54, 536,
+	65, 545,
+	69, 551,
+	70, 557,
+	76, 560
 	};
 	int triangulode[22] = {
-	294, 453,
-	283, 456,
-	265, 503,
-	244, 547,
+	292, 457,
 	247, 559,
+	245, 549,
+	245, 542,
+	250, 531,
+	255, 519,
+	264, 510,
+	269, 496,
+	271, 483,
+	274, 472,
+	277, 462,
+	};
+	int cuerpotriangulode[24] = {
+	292, 460,
+	295, 468,
+	293, 482,
+	293, 493,
+	294, 505,
+	296, 517,
+	290, 529,
+	278, 533,
+	266, 543,
+	259, 552,
 	256, 558,
-	270, 538,
-	294, 525,
-	297, 514,
-	292, 470,
-	298, 460
+	246, 560
 	};
 	int bola1[16] = {//primera grande
 	124, 143,
@@ -275,7 +305,14 @@ bool ModuleSceneIntro::Start()
 	triangulos[1]->listener = this;
 	triangulos[0]->collidertype = ColliderType::SOMBREROS;
 	triangulos[1]->collidertype = ColliderType::SOMBREROS;
-
+	cuerpotriangulos[0] = App->physics->CreateChain(0, 0, cuerpotrianguloiz, 28);
+	cuerpotriangulos[0]->body->SetType(b2_staticBody);
+	cuerpotriangulos[0]->body->GetFixtureList()->SetRestitution(0.5f);
+	
+	cuerpotriangulos[1] = App->physics->CreateChain(0, 0, cuerpotriangulode, 24);
+	cuerpotriangulos[1]->body->SetType(b2_staticBody);
+	cuerpotriangulos[1]->body->GetFixtureList()->SetRestitution(0.5f);
+	//barriles
 	barriles[0] = App->physics->CreateBumper(128, 166, 23);
 	barriles[1] = App->physics->CreateBumper(194, 223, 23);
 	barriles[2] = App->physics->CreateBumper(230, 154, 23);
@@ -382,13 +419,13 @@ update_status ModuleSceneIntro::Update()
 	{
 		spring->body->ApplyForce(b2Vec2(0, 50), b2Vec2(0, 0), true);
 	}
-	/*if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 
 	{
 		ray_on = !ray_on;
 		ray.x = App->input->GetMouseX();
 		ray.y = App->input->GetMouseY();
-	}*/
+	}
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{

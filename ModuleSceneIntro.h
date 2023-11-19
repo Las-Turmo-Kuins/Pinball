@@ -26,6 +26,7 @@ public:
 	PhysBody* coins[7];
 
 	PhysBody* triangulos[2];
+	PhysBody* cuerpotriangulos[2];
 	PhysBody* barriles[4];
 	PhysBody* map;
 	PhysBody* map2;
