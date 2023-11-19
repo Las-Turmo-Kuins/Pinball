@@ -351,6 +351,8 @@ bool ModuleSceneIntro::Start()
 		scorerect[i] = {20 * i, 91, 16, 21 };
 	}
 
+
+
 	return ret;
 }
 
@@ -559,7 +561,15 @@ update_status ModuleSceneIntro::Update()
 	App->fonts->BlitText(355, 50, scoreFont, scoreText);
 	//App->renderer->Blit(Heart, 340, 53, NULL);
 
+	string sl = to_string(lives);
+	
+	for (unsigned int i = 0; i < sl.size(); i++)
+	{
+		int digitl = sl[i] - '0';
 
+		App->renderer->Blit(numsscore, 420 , 520, &scorerect[digitl], 0.0f);
+
+	}
 	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
 	{
 		LOG("add 100 score");
