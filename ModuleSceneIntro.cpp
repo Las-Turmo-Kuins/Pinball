@@ -613,11 +613,10 @@ update_status ModuleSceneIntro::Update()
 		score += 100;
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
-	{
-
-		lives = 0;
-	}
+	//if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+	//{
+	//	lives = 0;
+	//}
 
 
 	return UPDATE_CONTINUE;
