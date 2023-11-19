@@ -568,7 +568,7 @@ update_status ModuleSceneIntro::Update()
 		int digitl = sl[i] - '0';
 
 		App->renderer->Blit(numsscore, 420 , 520, &scorerect[digitl], 0.0f);
-
+		App->renderer->Blit(bola, 400, 525);
 	}
 	if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
 	{
