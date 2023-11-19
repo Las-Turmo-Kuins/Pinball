@@ -249,12 +249,10 @@ bool ModuleSceneIntro::Start()
 	coins[6] = App->physics->CreateBumper(311, 392, 9);
 	
 	coins[2]->listener = this;
-	
 	coins[5]->listener = this;
 	coins[6]->listener = this;
 
 	coins[2]->collidertype = ColliderType::MONEDAS;
-		
 	coins[5]->collidertype = ColliderType::MONEDAS;
 	coins[6]->collidertype = ColliderType::MONEDAS;	
 	;
@@ -350,7 +348,7 @@ bool ModuleSceneIntro::Start()
 
 	for (int i = 0; i < 10; i++)
 	{
-		scorerect[i] = { 1 + 8 * i, 81, 7, 8 };
+		scorerect[i] = {20 * i, 91, 16, 21 };
 	}
 
 	return ret;
@@ -547,13 +545,13 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	string sc = to_string(score);
-	int xpos = 400 - (sc.size() * 8);
+	int xpos = 460 - (sc.size() * 16);
 	int digit = 0;
 	for (unsigned int i = 0; i < sc.size(); i++)
 	{
 		digit = sc[i] - '0';
 
-		App->renderer->Blit(numsscore, xpos + (i * 8), 580, &scorerect[digit], 0.0f);
+		App->renderer->Blit(numsscore, xpos + (i * 17), 580, &scorerect[digit], 0.0f);
 
 	}
 	App->renderer->DrawQuad({ 340,50,40,20 }, 0, 0, 0);
@@ -574,38 +572,6 @@ update_status ModuleSceneIntro::Update()
 		lives = 0;
 	}
 
-	//if (lives == 0)
-	//{
-	//	if (Mute)
-	//	{
-	//		App->player->door = false;
-	//		App->physics->world->DestroyBody(App->player->ball->body);
-	//		char lookupTable[] = { "0123456789 0123456789" };
-	//		scoreFont2 = App->fonts->Load("pinball/fonts/font2.png", lookupTable, 2);
-
-	//		GameOver = App->textures->Load("pinball/GameOver.png");
-	//		App->audio->PlayMusic("pinball/Audio/NoMusic.ogg");
-	//		App->audio->PlayFx(Sus);
-	//		Mute = false;
-	//	}
-	//	App->renderer->Blit(GameOver, 0, 120, NULL);
-
-	//	sprintf_s(scoreText, 10, "%8d", score);
-	//	App->fonts->BlitText(90, 330, scoreFont2, scoreText);
-
-
-	//	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-	//	{
-	//		lives = 5;
-	//		score = 0;
-	//		MusicOn = true;
-	//		Mute = true;
-	//		App->player->ball = App->physics->CreateCircle(385, 477, 9.5);
-	//		App->player->ball->listener = this;
-
-	//		//App->textures->Unload(GameOver);
-	//	}
-	//}
 
 	return UPDATE_CONTINUE;
 }
