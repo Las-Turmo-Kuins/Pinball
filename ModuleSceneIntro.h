@@ -74,7 +74,7 @@ public:
 	SDL_Texture* numsscore;
 	SDL_Texture* canonball;
 
-
+	//bool bumper = false;
 	
 	int score = 0000;
 	int highScore=0;
