@@ -502,3 +502,36 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	}
 
 }
+int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const
+{
+	int ret = -1;
+
+	b2RayCastInput input;
+	b2RayCastOutput output;
+
+	input.p1.Set(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
+	input.p2.Set(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
+	input.maxFraction = 1.0f;
+
+	const b2Fixture* fixture = body->GetFixtureList();
+
+	while (fixture != NULL)
+	{
+		if (fixture->GetShape()->RayCast(&output, input, body->GetTransform(), 0) == true)
+		{
+			// do we want the normal ?
+
+			float fx = x2 - x1;
+			float fy = y2 - y1;
+			float dist = sqrtf((fx)+(fy));
+
+			normal_x = output.normal.x;
+			normal_y = output.normal.y;
+
+			return output.fraction * dist;
+		}
+		fixture = fixture->GetNext();
+	}
+
+	return ret;
+}
