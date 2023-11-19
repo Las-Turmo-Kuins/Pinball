@@ -540,7 +540,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 		App->scene_intro->score += 500;
 		App->scene_intro->Bonus1 = true;
 		App->audio->PlayFx(super_Fx);
-		combo++;
+		App->scene_intro->lives++;
 	}
 
 	if (physA->collidertype == ColliderType::SOMBREROS && physB->collidertype == ColliderType::BALL)
